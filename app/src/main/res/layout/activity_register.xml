@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    tools:context=".RegisterActivity">
+    <TextView
+        android:id="@+id/register_text_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"/>
+
+    <EditText
+    android:id="@+id/register_edit_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/register_text_id"
+    android:hint="아이디를 입력하세요."
+    />
+
+    <TextView
+        android:id="@+id/register_text_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PW"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/register_edit_id"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:id="@+id/register_edit_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/register_text_password"
+        android:hint="비밀번호를 입력하세요."
+        />
+
+    <Button
+        android:id="@+id/register_button_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/register_edit_password"
+        android:text="회원가입"
+        android:layout_centerHorizontal="true"
+        />
+</RelativeLayout>
