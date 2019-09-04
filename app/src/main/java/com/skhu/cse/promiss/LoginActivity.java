@@ -46,7 +46,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSoftKeyboardShow() {
-                center_view.setVisibility(View.GONE);
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        center_view.setVisibility(View.GONE);
+                    }
+                });
             }
         });
         editText_id=(EditText)findViewById(R.id.login_edit_id);
