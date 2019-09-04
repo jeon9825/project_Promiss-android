@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,6 +14,13 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.skhu.cse.promiss.keyboard.SoftKeyboard;
+import com.skhu.cse.promiss.server.GetJson;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -61,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String id = editText_id.getText().toString();
                 String password = editText_password.getText().toString();
+                GetJson getJson = GetJson.getInstance();
+                getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
                 Toast.makeText(LoginActivity.this,"id는"+id+" 비밀번호는 "+password,Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                 startActivity(intent);
@@ -68,4 +78,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private Callback callback = new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) { // 통신 실패
+
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException { // 통신 성공
+            String result = response.body().string();
+            Log.d("server response:",result);
+        }
+    };
 }

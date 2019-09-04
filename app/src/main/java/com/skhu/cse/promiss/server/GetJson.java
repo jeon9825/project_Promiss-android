@@ -31,15 +31,17 @@ public class GetJson {
         client.newCall(request).enqueue(callback); //통신후 콜백될 함수
     }
 
-    public void requestPost(String parameter, Callback callback) {
+    public void requestPost(String api, Callback callback, String ... parameter) {
 
-        RequestBody body = new FormBody.Builder()
-
-                .build();
+        String URL = url+api;
+        FormBody.Builder body = new FormBody.Builder();
+        for (int i = 0; i<parameter.length;i=i+2){
+            body.add(parameter[i],parameter[i+1]);
+        }
 
         Request request = new Request.Builder()
-                .url(url) //통신하고자하는 url
-                .post(body)
+                .url(URL) //통신하고자하는 url
+                .post(body.build())
                 .build();
         client.newCall(request).enqueue(callback); //통신후 콜백될 함수
     }
