@@ -6,9 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_white"
+        android:id="@+id/map_toolbar">
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
+            android:id="@+id/map_person_setting"
+            android:src="@drawable/circle_person"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ID: k1miso"
+            android:textColor="@color/mainColor2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/map_person_setting"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PRO_MISS"
+            android:textColor="@color/mainColor2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/map_bottom_view">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/map_bottom_appointment_title_view"
+            android:layout_height="wrap_content"
+            android:background="@color/mainColor2"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:layout_margin="10dp"
+                android:text="현재 약속이 없습니다."/>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
     <fragment android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/map_toolbar"
         android:id="@+id/map"
+        android:layout_above="@id/map_bottom_view"
         android:name="com.naver.maps.map.MapFragment" />
+
+
 
 </RelativeLayout>

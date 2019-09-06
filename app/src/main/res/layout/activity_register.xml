@@ -4,49 +4,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
+    android:background="@color/mainColor2"
     tools:context=".RegisterActivity">
-    <TextView
-        android:id="@+id/register_text_id"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/mainColor1"
+        android:id="@+id/register_toolbar"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="회원가입"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"/>
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/close"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/register_toolbar"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+    <TextView
+        android:id="@+id/register_text_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="ID"
+
+        android:layout_marginBottom="5dp"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
         android:layout_marginTop="30dp"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
     <EditText
     android:id="@+id/register_edit_id"
     android:layout_width="match_parent"
+        android:padding="10dp"
+        android:background="@drawable/stroke_white"
     android:layout_height="wrap_content"
+        android:lines="1"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColorHint="#ffffff"
     android:layout_below="@id/register_text_id"
     android:hint="아이디를 입력하세요."
     />
 
     <TextView
         android:id="@+id/register_text_password"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PW"
+        android:text="PassWord"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="30dp"
         android:layout_below="@id/register_edit_id"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/register_edit_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:lines="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:background="@drawable/stroke_white"
         android:layout_below="@id/register_text_password"
+        android:hint="비밀번호를 입력하세요."
+        />
+
+
+    <TextView
+        android:id="@+id/register_text_password_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check PassWord"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/register_edit_password"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/register_edit_password_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:lines="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:background="@drawable/stroke_white"
+        android:layout_below="@id/register_text_password_check"
         android:hint="비밀번호를 입력하세요."
         />
 
     <Button
         android:id="@+id/register_button_ok"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/register_edit_password"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/corner_maincolor3"
+        android:layout_below="@id/register_edit_password_check"
         android:text="회원가입"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:textColor="@color/mainColor2"
         android:layout_centerHorizontal="true"
         />
+    </RelativeLayout>
 </RelativeLayout>

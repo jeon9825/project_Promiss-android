@@ -74,8 +74,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String id = editText_id.getText().toString();
                 String password = editText_password.getText().toString();
-                GetJson getJson = GetJson.getInstance();
-                getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
+
+//                GetJson getJson = GetJson.getInstance();
+//                getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
+
+
+
                 Toast.makeText(LoginActivity.this,"id는"+id+" 비밀번호는 "+password,Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                 startActivity(intent);
