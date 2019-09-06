@@ -28,6 +28,7 @@
         <ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:id="@+id/register_close"
             android:scaleType="fitXY"
             android:layout_centerVertical="true"
             android:background="@null"
