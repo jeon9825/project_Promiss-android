@@ -6,4 +6,5 @@
     <color name="mainColor1">#454FA1</color>
     <color name="mainColor2">#394180</color>
     <color name="mainColor3">#FFF575</color>
+    <color name="error">#F8696E</color>
 </resources>

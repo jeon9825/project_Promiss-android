@@ -72,14 +72,19 @@ public class LoginActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id = editText_id.getText().toString();
-                String password = editText_password.getText().toString();
-                GetJson getJson = GetJson.getInstance();
-                getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
-                Toast.makeText(LoginActivity.this,"id는"+id+" 비밀번호는 "+password,Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                startActivity(intent);
-                finish();
+                final String id = editText_id.getText().toString();
+                final String password = editText_password.getText().toString();
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        GetJson getJson = GetJson.getInstance();
+                        getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
+                    }
+                };
+//                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+//                startActivity(intent);
+//                finish();
             }
         });
     }
@@ -87,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     private Callback callback = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) { // 통신 실패
+            Toast.makeText(LoginActivity.this,"로그인 실패",Toast.LENGTH_LONG).show();
 
         }
 
