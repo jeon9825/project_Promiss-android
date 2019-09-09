@@ -11,10 +11,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.skhu.cse.promiss.keyboard.SoftKeyboard;
 import com.skhu.cse.promiss.server.GetJson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -43,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onSoftKeyboardHide() {
 
             }
-
             @Override
             public void onSoftKeyboardShow() {
                 LoginActivity.this.runOnUiThread(new Runnable() {
@@ -57,22 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         editText_id=(EditText)findViewById(R.id.login_edit_id);
         editText_password=(EditText)findViewById(R.id.login_edit_password);
         Button b = (Button)findViewById(R.id.login_button);
-
-        Intent i = getIntent();
-        String id;
-        String pw;
-        try {
-            id= i.getStringExtra("id");
-            editText_id.setText(id);
-            pw= i.getStringExtra("pw");
-            editText_id.setText(pw);
-        }catch (NullPointerException e){
-            Toast.makeText(LoginActivity.this, "아이디나 비번 입력하라구",Toast.LENGTH_LONG).show();
-        }
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final String id = editText_id.getText().toString();
                 final String password = editText_password.getText().toString();
                 new Thread(){
@@ -86,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
 //                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
 //                startActivity(intent);
 //                finish();
-
             }
         });
     }
@@ -94,14 +85,40 @@ public class LoginActivity extends AppCompatActivity {
     private Callback callback = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) { // 통신 실패
-            Toast.makeText(LoginActivity.this,"로그인 실패",Toast.LENGTH_LONG).show();
 
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LoginActivity.this,"네트워크 연결 실패",Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
         public void onResponse(Call call, Response response) throws IOException { // 통신 성공
             String result = response.body().string();
             Log.d("server response:",result);
+            try {
+                JSONObject object=new JSONObject(result);
+
+                if(object.getInt("result")==2000){ //성공
+//                    =object.getString("data")
+                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{ //실패
+                    final String message = object.getString("message");
+                    LoginActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this,message,Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            // JSONArray array;
         }
     };
 }

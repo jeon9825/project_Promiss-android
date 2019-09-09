@@ -44,10 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:padding="15dp"
         android:layout_below="@id/login_text_id"
         android:lines="1"
         android:hint="아이디"
-        android:textColorHint="@android:color/white"/>
+        android:textColorHint="@android:color/white"
+        android:background="@drawable/stroke_white"/>
 
     <TextView
         android:id="@+id/login_text_password"
@@ -67,10 +69,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:padding="15dp"
         android:layout_below="@id/login_text_password"
         android:lines="1"
         android:hint="비밀번호"
-        android:textColorHint="@android:color/white"/>
+        android:textColorHint="@android:color/white"
+        android:background="@drawable/stroke_white"/>
 
     <Button
         android:id="@+id/login_button"
