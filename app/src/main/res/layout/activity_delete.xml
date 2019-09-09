@@ -152,6 +152,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:id="@+id/delete_default_btn"
             android:background="@drawable/corner_maincolor3"
             android:layout_marginTop="30dp"
             android:text="확인"
