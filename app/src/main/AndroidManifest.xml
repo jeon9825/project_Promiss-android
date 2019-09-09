@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".DeleteActivity"></activity>
+
+        <activity android:name=".ChangePassword"></activity>
+
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MapActivity" />
         <activity
