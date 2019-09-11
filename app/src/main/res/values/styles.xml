@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="PromissAlertDialogStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="textColorAlertDialogListItem" >@color/mainColor2</item>
+    </style>
 </resources>

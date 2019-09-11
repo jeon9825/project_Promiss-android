@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="약속 만들기"
+                android:id="@+id/map_add_btn"
                 android:background="@color/mainColor3"
                 android:textColor="@color/mainColor2"
                 android:textStyle="bold"

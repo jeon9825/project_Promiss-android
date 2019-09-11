@@ -41,7 +41,12 @@ public class LoginActivity extends AppCompatActivity {
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
             @Override
             public void onSoftKeyboardHide() {
-
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        center_view.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -75,17 +80,17 @@ public class LoginActivity extends AppCompatActivity {
 
                 final String id = editText_id.getText().toString();
                 final String password = editText_password.getText().toString();
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        GetJson getJson = GetJson.getInstance();
-                        getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
-                    }
-                };
-//                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-//                startActivity(intent);
-//                finish();
+//                new Thread(){
+//                    @Override
+//                    public void run() {
+//                        super.run();
+//                        GetJson getJson = GetJson.getInstance();
+//                        getJson.requestPost("api/User/Login",callback,"id",id,"pw",password);
+//                    }
+//                }.start();
+                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                startActivity(intent);
+                finish();
 
             }
         });

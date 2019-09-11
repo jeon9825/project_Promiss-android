@@ -11,7 +11,7 @@ public class GetJson {
     private OkHttpClient client;
     private static GetJson instance = new GetJson();
 
-    private String url = "http://106.10.54.206";
+    private String url = "http://106.10.54.206/";
     public static GetJson getInstance() {
         return instance;
     }

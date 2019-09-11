@@ -30,6 +30,13 @@ public class DeleteActivity extends AppCompatActivity {
 
         password=findViewById(R.id.delete_editText_check);
 
+        findViewById(R.id.delete_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         findViewById(R.id.delete_default_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
