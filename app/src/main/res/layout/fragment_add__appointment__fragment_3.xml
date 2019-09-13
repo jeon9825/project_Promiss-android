@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainColor2"
+    tools:context=".Fragments.Add_Appointment_Fragment_3">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="30dp"
+        >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/center">
+
+        </View>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:id="@+id/frg_appointment_3_t1"
+            android:text="Step 3"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/frg_appointment_3_t1"
+            android:layout_marginTop="10dp"
+            android:id="@+id/frg_appointment_3_t2"
+            android:text="날짜와 시간을 정해주세요"
+            android:textColor="#ffffff"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:id="@+id/frg_appointment_3_t3"
+            android:text="날짜"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/frg_appointment_3_t2"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:id="@+id/frg_appointment_3_t4"
+            android:text="시간"
+            android:layout_toRightOf="@id/center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/frg_appointment_3_t2"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019.03.15(화)"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:background="@drawable/stroke_white"
+            android:padding="15dp"
+            android:id="@+id/frg_appointment_3_t5"
+            android:layout_below="@id/frg_appointment_3_t4"
+            android:layout_marginTop="20dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오후 04:30"
+            android:textColor="#ffffff"
+            android:layout_alignLeft="@id/frg_appointment_3_t4"
+            android:textStyle="bold"
+            android:background="@drawable/stroke_white"
+            android:padding="15dp"
+            android:id="@+id/frg_appointment_3_t6"
+            android:layout_below="@id/frg_appointment_3_t4"
+            android:layout_marginTop="20dp"/>
+
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:id="@+id/frg_appointment_3_btn"
+            android:background="@drawable/corner_maincolor3"
+            android:layout_marginTop="30dp"
+            android:text="확인"
+            android:textColor="@color/mainColor2"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@id/frg_appointment_3_t5"/>
+
+    </RelativeLayout>
+</RelativeLayout>

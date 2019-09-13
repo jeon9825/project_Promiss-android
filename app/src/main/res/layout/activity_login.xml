@@ -5,6 +5,7 @@
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/mainColor2"
     tools:context=".LoginActivity">
     <TextView
@@ -45,6 +46,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_below="@id/login_text_id"
+        android:inputType="text"
         android:lines="1"
         android:hint="아이디"
         android:textColorHint="@android:color/white"/>
@@ -69,6 +71,7 @@
         android:layout_marginRight="20dp"
         android:layout_below="@id/login_text_password"
         android:lines="1"
+        android:inputType="textPassword"
         android:hint="비밀번호"
         android:textColorHint="@android:color/white"/>
 

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainColor2"
+    tools:context=".Fragments.Add_Appointment_Fragment_2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:id="@+id/frg_appointment_2_t1"
+        android:text="Step 2"
+        android:textColor="#ffffff"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/frg_appointment_2_t2"
+        android:layout_below="@id/frg_appointment_2_t1"
+        android:text="만날 장소를 정해주세요"
+        android:textColor="#ffffff"
+        />
+
+    <fragment android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:id="@+id/map"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/frg_appointment_2_t2"
+        android:name="com.naver.maps.map.MapFragment" />
+
+        <TextView
+            android:id="@+id/frg_appointment_2_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:textSize="17sp"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:background="@drawable/stroke_white"
+            android:layout_below="@id/map"
+            android:text="서울시 구로구 항동"
+            />
+
+        <TextView
+            android:id="@+id/frg_appointment_2_t3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:layout_below="@id/frg_appointment_2_address"
+            android:text="상세주소"
+            />
+        <EditText
+            android:id="@+id/frg_appointment_2_address_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:minHeight="100dp"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:background="@drawable/stroke_white"
+            android:layout_below="@id/frg_appointment_2_t3"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:id="@+id/frg_appointment_2_btn"
+            android:background="@drawable/corner_maincolor3"
+            android:layout_marginTop="30dp"
+            android:text="다음"
+            android:textColor="@color/mainColor2"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@id/frg_appointment_2_address_detail"/>
+    </RelativeLayout>
+</ScrollView>

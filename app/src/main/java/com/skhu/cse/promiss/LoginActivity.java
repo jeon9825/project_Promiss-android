@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
             @Override
             public void onSoftKeyboardHide() {
+                Log.d("키보드","내려감");
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSoftKeyboardShow() {
+                Log.d("키보드","올라감");
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
