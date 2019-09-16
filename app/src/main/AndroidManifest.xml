@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddAppointmentActivity"></activity>
+        <activity android:name=".AddAppointmentActivity"
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
         <activity android:name=".DeleteActivity" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".RegisterActivity" />

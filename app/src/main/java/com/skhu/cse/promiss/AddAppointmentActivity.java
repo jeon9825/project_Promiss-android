@@ -89,6 +89,14 @@ public class AddAppointmentActivity extends AppCompatActivity {
         item.setName(name);
     }
 
+    public void setAppointmentAddress(double latitude,double longitude,String addres,String deteil)
+    {
+        item.setLatitude(latitude);
+        item.setLongitude(longitude);
+        item.setAddress(addres);
+        item.setAddress_detail(deteil);
+    }
+
 
     public void Back(){
         if(index!=1){ //더이상 뒤로갈 수 없다.
@@ -100,6 +108,9 @@ public class AddAppointmentActivity extends AppCompatActivity {
                 back_btn.setVisibility(View.GONE);
             }
             ShowFrgament(fragment);
+        }else
+        {
+            finish();
         }
     }
 
@@ -157,5 +168,10 @@ public class AddAppointmentActivity extends AppCompatActivity {
     {
         if(frgmaent!=null)
         getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frgment,frgmaent).commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Back();
     }
 }
