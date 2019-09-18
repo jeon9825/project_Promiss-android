@@ -97,6 +97,18 @@ public class AddAppointmentActivity extends AppCompatActivity {
         item.setAddress_detail(deteil);
     }
 
+    public void setAppointment_Date(String date,String time)
+    {
+        item.setDate(date);
+        item.setTime(time);
+    }
+
+    public void setAppointment_Money(int money_cycle,int money)
+    {
+        item.setMoney(money);
+        item.setMoney_cycle(money_cycle);
+    }
+
 
     public void Back(){
         if(index!=1){ //더이상 뒤로갈 수 없다.

@@ -13,6 +13,43 @@ public class AppointmentItem {
     String address;//주소
     String address_detail;//상세주소
 
+    String date;
+    String time;
+    int money;
+    int money_cycle;
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public int getMoney_cycle() {
+        return money_cycle;
+    }
+
+    public void setMoney_cycle(int money_cycle) {
+        this.money_cycle = money_cycle;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getName() {
         return name;
     }

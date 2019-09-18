@@ -17,11 +17,13 @@ import android.widget.Toast;
 
 import com.skhu.cse.promiss.AddAppointmentActivity;
 import com.skhu.cse.promiss.R;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Add_Appointment_Fragment_4 extends Fragment {
+public class Add_Appointment_Fragment_4 extends Fragment  {
 
 
     ImageButton add_1;
@@ -67,7 +69,7 @@ public class Add_Appointment_Fragment_4 extends Fragment {
         View.OnClickListener addMoney=new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(view.getId()==R.id.frg_appointment_4_add) //벌금 주기
+                if(view.getId()==R.id.frg_appointment_4_add_2) //벌금 금액
                 {
                     if(money_N==3000) //최대 금액
                     {
@@ -97,14 +99,14 @@ public class Add_Appointment_Fragment_4 extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(view.getId()==R.id.frg_appointment_4_minus) //벌금 주기
+                if(view.getId()==R.id.frg_appointment_4_minus_2) //벌금 주기
                 {
                     if(money_N==100) //최소 금액
                     {
                         Toast.makeText(getActivity(),"최소 금액입니다.",Toast.LENGTH_LONG).show();
                     }else
                     {
-                        money_N--;
+                        money_N-=100;
                         money.setText(""+money_N);
                     }
                 }else
@@ -132,8 +134,12 @@ public class Add_Appointment_Fragment_4 extends Fragment {
         view.findViewById(R.id.frg_appointment_4_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((AddAppointmentActivity)getActivity()).setAppointment_Money(money_cycle_N,money_N);
                 ((AddAppointmentActivity)getActivity()).Next();
+
             }
         });
     }
+
+
 }
