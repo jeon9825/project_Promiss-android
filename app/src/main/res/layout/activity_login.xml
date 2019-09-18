@@ -75,6 +75,7 @@
         android:lines="1"
         android:hint="비밀번호"
         android:textColor="#fff"
+        android:inputType="textPassword"
         android:textColorHint="@android:color/white"
         android:background="@drawable/stroke_white"/>
 
