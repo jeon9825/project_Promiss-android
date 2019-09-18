@@ -48,6 +48,7 @@
         android:layout_below="@id/login_text_id"
         android:lines="1"
         android:hint="아이디"
+        android:textColor="#fff"
         android:textColorHint="@android:color/white"
         android:background="@drawable/stroke_white"/>
 
@@ -73,6 +74,7 @@
         android:layout_below="@id/login_text_password"
         android:lines="1"
         android:hint="비밀번호"
+        android:textColor="#fff"
         android:textColorHint="@android:color/white"
         android:background="@drawable/stroke_white"/>
 
