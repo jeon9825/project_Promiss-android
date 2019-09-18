@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
             @Override
             public void onSoftKeyboardHide() {
+
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -58,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSoftKeyboardShow() {
+                Log.d("키보드","올라감");
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -75,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String id = editText_id.getText().toString();
                 final String password = editText_password.getText().toString();
+
                 if (id != null && password != null && id.equals("") && password.equals("")) {
                     Toast.makeText(getApplicationContext(), "입력하지않았습니다.", Toast.LENGTH_LONG).show();
                 }
@@ -86,9 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         getJson.requestPost("api/User/Login", callback, "id", id, "pw", password);
                     }
                 }.run();
-//                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-//                startActivity(intent);
-//                finish();
+
             }
         });
         register_button.setOnClickListener(new View.OnClickListener() {

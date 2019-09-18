@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainColor2"
+    android:padding="30dp"
+    tools:context=".Fragments.Add_Appointment_Fragment_4">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_height="wrap_content">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:id="@+id/frg_appointment_4_t1"
+        android:text="Step 4"
+        android:textColor="#ffffff"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_below="@id/frg_appointment_4_t1"
+        android:layout_marginTop="10dp"
+        android:id="@+id/frg_appointment_4_t2"
+        android:text="벌금과 벌금을 측정할 주기를 설정해주세요"
+        android:textColor="#ffffff"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="벌금 주기"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:id="@+id/frg_appointment_4_t3"
+        android:layout_below="@id/frg_appointment_4_t2"
+        android:layout_marginTop="20dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="원 밖으로 벗어났는 지"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:id="@+id/frg_appointment_4_t4"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/frg_appointment_4_t3" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/frg_appointment_4_money_cycle_layout"
+            android:layout_below="@id/frg_appointment_4_t4"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:id="@+id/frg_appointment_4_add"
+                android:src="@drawable/add"/>
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:layout_marginTop="10dp"
+                android:id="@+id/frg_appointment_4_minus"
+                android:layout_below="@id/frg_appointment_4_add"
+                android:src="@drawable/minus"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분 마다 측정합니다."
+                android:layout_marginLeft="10dp"
+                android:id="@+id/frg_appointment_4_t5"
+                android:layout_alignParentRight="true"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:layout_alignParentBottom="true"/>
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/frg_appointment_4_add"
+                android:background="@drawable/stroke_white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:id="@+id/frg_appointment_4_money_cycle"
+                android:paddingBottom="5dp"
+                android:textSize="30sp"
+                android:gravity="right|bottom"
+                android:text="5"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_toLeftOf="@id/frg_appointment_4_t5"
+                android:layout_alignTop="@id/frg_appointment_4_add"
+                android:layout_alignBottom="@id/frg_appointment_4_minus"/>
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="벌금 금액"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:id="@+id/frg_appointment_4_t6"
+            android:layout_below="@id/frg_appointment_4_money_cycle_layout"
+            android:layout_marginTop="20dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="측정하는 순간 원 밖에 벗어나 있으면"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:id="@+id/frg_appointment_4_t7"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/frg_appointment_4_t6" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/frg_appointment_4_money_layout_2"
+            android:layout_below="@id/frg_appointment_4_t7"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:id="@+id/frg_appointment_4_add_2"
+                android:src="@drawable/add"/>
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:layout_marginTop="10dp"
+                android:id="@+id/frg_appointment_4_minus_2"
+                android:layout_below="@id/frg_appointment_4_add_2"
+                android:src="@drawable/minus"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분 마다 측정합니다."
+                android:layout_marginLeft="10dp"
+                android:id="@+id/frg_appointment_4_t8"
+                android:layout_alignParentRight="true"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:layout_alignParentBottom="true"/>
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/frg_appointment_4_add_2"
+                android:background="@drawable/stroke_white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:id="@+id/frg_appointment_4_money"
+                android:paddingBottom="5dp"
+                android:textSize="30sp"
+                android:gravity="right|bottom"
+                android:text="100"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_toLeftOf="@id/frg_appointment_4_t8"
+                android:layout_alignTop="@id/frg_appointment_4_add_2"
+                android:layout_alignBottom="@id/frg_appointment_4_minus_2"/>
+
+
+        </RelativeLayout>
+
+
+
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/frg_appointment_4_btn"
+        android:background="@drawable/corner_maincolor3"
+        android:layout_marginTop="30dp"
+        android:text="확인"
+        android:layout_below="@id/frg_appointment_4_money_layout_2"
+        android:textColor="@color/mainColor2"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+    </RelativeLayout>
+
+
+</ScrollView>

@@ -4,6 +4,7 @@
     package="com.skhu.cse.promiss">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -14,11 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".AddAppointmentActivity"
+            android:windowSoftInputMode="adjustResize">
 
-        <activity android:name=".DeleteActivity"></activity>
-
-        <activity android:name=".ChangePassword"></activity>
-
+        </activity>
+        <activity android:name=".DeleteActivity" />
+        <activity android:name=".ChangePassword" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MapActivity" />
         <activity
