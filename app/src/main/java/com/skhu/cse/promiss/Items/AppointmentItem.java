@@ -1,5 +1,7 @@
 package com.skhu.cse.promiss.Items;
 
+import java.util.ArrayList;
+
 public class AppointmentItem {
 
     public static AppointmentItem item=new AppointmentItem();
@@ -17,6 +19,25 @@ public class AppointmentItem {
     String time;
     int money;
     int money_cycle;
+
+    int member_num;
+    ArrayList<Integer> integers;
+
+    public int getMember_num() {
+        return member_num;
+    }
+
+    public void setMember_num(int member_num) {
+        this.member_num = member_num;
+    }
+
+    public ArrayList<Integer> getIntegers() {
+        return integers;
+    }
+
+    public void setIntegers(ArrayList<Integer> integers) {
+        this.integers = integers;
+    }
 
     public int getMoney() {
         return money;

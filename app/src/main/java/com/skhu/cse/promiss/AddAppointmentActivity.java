@@ -17,6 +17,9 @@ import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_5;
 import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_6;
 import com.skhu.cse.promiss.Items.AppointmentItem;
 import com.skhu.cse.promiss.custom.PromissDialog;
+import com.skhu.cse.promiss.server.GetJson;
+
+import java.util.ArrayList;
 
 public class AddAppointmentActivity extends AppCompatActivity {
 
@@ -103,6 +106,12 @@ public class AddAppointmentActivity extends AppCompatActivity {
         item.setTime(time);
     }
 
+    public void setAppointment_user(ArrayList<Integer> users)
+    {
+        item.setMember_num(users.size());
+        item.setIntegers(users);
+    }
+
     public void setAppointment_Money(int money_cycle,int money)
     {
         item.setMoney(money);
@@ -135,6 +144,17 @@ public class AddAppointmentActivity extends AppCompatActivity {
                 back_btn.setVisibility(View.VISIBLE);
             }
             ShowFrgament(fragment);
+        }else //약속 생송
+        {
+
+            //약속 생성
+//            new Thread(){
+//                @Override
+//                public void run() {
+//                    GetJson json=GetJson.getInstance();
+//                }
+//            }.run();
+            finish();
         }
     }
 

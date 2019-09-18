@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skhu.cse.promiss.AddAppointmentActivity;
 import com.skhu.cse.promiss.R;
 
 /**
@@ -39,6 +40,7 @@ public class Add_Appointment_Fragment_6 extends Fragment {
             @Override
             public void onClick(View view) {
                 //약속 상세정보 보기
+                ((AddAppointmentActivity)getActivity()).Next();
             }
         });
     }

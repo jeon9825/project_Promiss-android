@@ -36,7 +36,7 @@ dependencies {
     //지도 location sdk
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     // 서버
-    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation("com.squareup.okhttp3:okhttp:4.2.0")
     //Tag
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
     //Date
