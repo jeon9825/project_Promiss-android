@@ -41,4 +41,6 @@ dependencies {
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
     //Date
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    //search layout
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
 }

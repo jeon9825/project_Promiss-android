@@ -1,6 +1,7 @@
 package com.skhu.cse.promiss.Fragments;
 
 
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.skhu.cse.promiss.AddAppointmentActivity;
+import com.skhu.cse.promiss.LocationSettingAcvtivity;
 import com.skhu.cse.promiss.R;
 
 /**
@@ -108,6 +110,8 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
             @Override
             public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
                 map_Check=true;
+                Intent intent=new Intent(getActivity(), LocationSettingAcvtivity.class);
+                startActivity(intent);
             }
         });
     }

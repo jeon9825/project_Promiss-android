@@ -40,8 +40,22 @@ public class GetJson {
         }
 
         Request request = new Request.Builder()
-                .url(URL) //통신하고자하는 url
+                .url(URL) //통신하고자하는 u
                 .post(body.build())
+                .build();
+        client.newCall(request).enqueue(callback); //통신후 콜백될 함수
+    }
+
+    //네이버 지도에서 쓰일 메소드
+    public void requestMapApi(Callback callback, String ...parameter){
+        String URL = "https://naveropenapi.apigw.ntruss.com/map-place/v1/search?"; //네이버 지도 API 주소
+
+        URL +="query="+parameter[0]+"&coordinate="+parameter[1]+","+parameter[2];
+
+        Request request = new Request.Builder()
+                .url(URL) //통신하고자하는 url
+                .addHeader("X-NCP-APIGW-API-KEY-ID","ke4acfug28")
+                .addHeader("X-NCP-APIGW-API-KEY","Q2CkzTpLxk7XKxEKn6GVIUPH1HTYsl8cKj7l15tn")
                 .build();
         client.newCall(request).enqueue(callback); //통신후 콜백될 함수
     }
