@@ -42,6 +42,7 @@ public class GetJson {
         Request request = new Request.Builder()
                 .url(URL) //통신하고자하는 url
                 .post(body.build())
+
                 .build();
         client.newCall(request).enqueue(callback); //통신후 콜백될 함수
     }
