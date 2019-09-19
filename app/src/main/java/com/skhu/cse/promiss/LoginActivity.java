@@ -2,6 +2,7 @@ package com.skhu.cse.promiss;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.keyboard.SoftKeyboard;
 import com.skhu.cse.promiss.server.GetJson;
 
@@ -123,7 +125,13 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject object = new JSONObject(result);
 
                 if (object.getInt("result") == 2000) { //성공
-//                    =object.getString("data")
+
+
+                   object = object.getJSONObject("data");
+
+                    UserData.shared.setId(object.getInt("id"));
+                    UserData.shared.setName(object.getString("user_id"));
+
                     Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                     startActivity(intent);
                     finish();

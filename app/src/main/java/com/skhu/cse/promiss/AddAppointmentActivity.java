@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_1;
 import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_2;
@@ -16,10 +18,21 @@ import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_4;
 import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_5;
 import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_6;
 import com.skhu.cse.promiss.Items.AppointmentItem;
+import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.custom.PromissDialog;
 import com.skhu.cse.promiss.server.GetJson;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class AddAppointmentActivity extends AppCompatActivity {
 
@@ -148,16 +161,105 @@ public class AddAppointmentActivity extends AppCompatActivity {
         {
 
             //약속 생성
-//            new Thread(){
-//                @Override
-//                public void run() {
-//                    GetJson json=GetJson.getInstance();
-//                }
-//            }.run();
+            new Thread(){
+                @Override
+                public void run() {
+                    GetJson json=GetJson.getInstance();
+
+                    String[] body = new String[]{
+                            "id", UserData.shared.getId()+"",
+                            "address",item.getAddress(),
+                            "detail",item.getAddress_detail(),
+                            "latitude",item.getLatitude()+"",
+                            "longitude",item.getLongitude()+"",
+                            "date",item.getDate(),
+                            "date_time",item.getTime(),
+                            "Fine_time",item.getMoney_cycle()+"",
+                            "Fine_money", item.getMoney()+"",
+                            "num",item.getIntegers().size()+""
+                    };
+
+                    ArrayList<String> body_arrayList = new ArrayList<>();
+                    body_arrayList.addAll(Arrays.asList(body));
+
+
+                    ArrayList<Integer> integers = item.getIntegers();
+
+                    for(int i=0;i<integers.size();i++)
+                    {
+                        body_arrayList.add("member_id"+i);
+                        body_arrayList.add(integers.get(i).toString());
+                    }
+
+                    json.requestPost("api/User/newAppointment",callback,body_arrayList.toArray(new String[]{}));
+
+                }
+            }.run();
             finish();
         }
     }
 
+
+    Callback callback =new Callback() {
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            AddAppointmentActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(AddAppointmentActivity.this, "현재 네트워크 문제로 약속을 생성할 수 없습니다.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        }
+
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            String result = response.body().string();
+            Log.d("result",result);
+            try{
+                JSONObject object = new JSONObject(result);
+
+                if(object.getInt("result")==2000)
+                {
+
+                    AddAppointmentActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(AddAppointmentActivity.this, "약속 생성에 성공하였습니다.", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    });
+
+                }else
+                {
+                    final String message = object.getString("message");
+                    AddAppointmentActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(AddAppointmentActivity.this, message, Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    });
+                }
+
+
+            }catch (JSONException e)
+            {
+                AddAppointmentActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(AddAppointmentActivity.this, "현재 서버 문제로 약속을 생성할 수 없습니다.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+            }
+
+
+
+
+
+        }
+    };
 
 
     public Fragment GetFragment(int index)

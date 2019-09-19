@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.naver.maps.map.LocationTrackingMode;
@@ -16,6 +17,7 @@ import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.skhu.cse.promiss.Items.UserData;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -36,6 +38,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         final String[] menu={"로그아웃","비밀번호 변경","회원 탈퇴"};
 
+        TextView name = findViewById(R.id.map_title_user_name);
+        name.setText("ID: "+ UserData.shared.getName());
 
         findViewById(R.id.map_add_btn).setOnClickListener(new View.OnClickListener() {
             @Override
