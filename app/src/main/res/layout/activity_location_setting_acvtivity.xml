@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
+    <FrameLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainColor2"
+            app:title="주소 검색" />
+
+        <com.ferfalk.simplesearchview.SimpleSearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:visibility="visible"
+            app:type="card"
+            app:voiceSearch="true" />
+    </FrameLayout>
+
     <RelativeLayout
         android:id="@+id/map_bottom_view"
         android:layout_width="match_parent"
@@ -52,30 +75,6 @@
 
 
 
-        <FrameLayout
-            android:id="@+id/toolbar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/mainColor2"
-                app:title="주소 검색" />
-
-            <com.ferfalk.simplesearchview.SimpleSearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:voiceSearch="true"
-                app:type="card"
-                android:visibility="visible"
-                android:background="@color/colorPrimary" />
-        </FrameLayout>
-
-
 
     <fragment
         android:id="@+id/map"
@@ -86,5 +85,12 @@
         android:layout_below="@id/toolbar_container"
         android:layout_marginTop="0dp" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/location_setting_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:background="#ffffff"
+        android:layout_below="@id/toolbar_container"/>
 
 </RelativeLayout>
