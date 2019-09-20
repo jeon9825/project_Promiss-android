@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.skhu.cse.promiss.Items.UserData;
+import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.keyboard.SoftKeyboard;
 import com.skhu.cse.promiss.server.GetJson;
 
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     InputMethodManager inputManager;
     RelativeLayout loginView;
     View center_view;
+    RelativeLayout layout;
     SoftKeyboard softKeyboard;
 
     @Override
@@ -70,39 +73,64 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-        editText_id = (EditText) findViewById(R.id.login_edit_id);
-        editText_password = (EditText) findViewById(R.id.login_edit_password);
-        Button b = (Button) findViewById(R.id.login_button);
-        Button register_button = findViewById(R.id.register_button);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String id = editText_id.getText().toString();
-                final String password = editText_password.getText().toString();
+        layout=findViewById(R.id.login_login_layout);
 
-                if (id != null && password != null && id.equals("") && password.equals("")) {
-                    Toast.makeText(getApplicationContext(), "입력하지않았습니다.", Toast.LENGTH_LONG).show();
-                }
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        GetJson getJson = GetJson.getInstance();
-                        getJson.requestPost("api/User/Login", callback, "id", id, "pw", password);
+        if(BasicDB.getID(getApplicationContext())==-1) //초기화 or 다시 로그인
+        {
+            layout.setVisibility(View.VISIBLE);
+            editText_id = (EditText) findViewById(R.id.login_edit_id);
+            editText_password = (EditText) findViewById(R.id.login_edit_password);
+            Button b = (Button) findViewById(R.id.login_button);
+            Button register_button = findViewById(R.id.register_button);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final String id = editText_id.getText().toString();
+                    final String password = editText_password.getText().toString();
+
+                    if (id != null && password != null && id.equals("") && password.equals("")) {
+                        Toast.makeText(getApplicationContext(), "입력하지않았습니다.", Toast.LENGTH_LONG).show();
                     }
-                }.run();
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            GetJson getJson = GetJson.getInstance();
+                            getJson.requestPost("api/User/Login", callback, "id", id, "pw", password);
+                        }
+                    }.run();
 
+                }
+            });
+            register_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
-        });
-        register_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            );
+        }else //이미 로그인
+        {
+            UserData data=UserData.shared;
+            data.setId(BasicDB.getID(getApplicationContext()));
+            data.setName(BasicDB.getUserId(getApplicationContext()));
+
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    Intent intent=new Intent(LoginActivity.this,MapActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 500);
+
         }
-        );
+
+
     }
 
     private Callback callback = new Callback() {
@@ -131,6 +159,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     UserData.shared.setId(object.getInt("id"));
                     UserData.shared.setName(object.getString("user_id"));
+
+                    BasicDB.setUserInfo(getApplicationContext(),object.getString("user_id"),object.getString("user_pw"),object.getInt("id"));
 
                     Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                     startActivity(intent);

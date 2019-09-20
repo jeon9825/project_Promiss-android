@@ -86,7 +86,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingRight="10dp"
-        android:text="miso"
+        android:hint="아이디 검색"
         android:id="@+id/frg_appointment_5_search"
         android:layout_marginTop="5dp"
         android:inputType="text"/>

@@ -1,8 +1,10 @@
 package com.skhu.cse.promiss;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ public class AddAppointmentActivity extends AppCompatActivity {
     ImageButton back_btn;
     AppointmentItem item=AppointmentItem.item;
 
+    public static final int map_setting=1001;
     int index=1; //보고있는 화면 인덱스
     int maxIndex=6; //마지막 화면 인덱스
 
@@ -191,7 +194,7 @@ public class AddAppointmentActivity extends AppCompatActivity {
                         body_arrayList.add(integers.get(i).toString());
                     }
 
-                    json.requestPost("api/User/newAppointment",callback,body_arrayList.toArray(new String[]{}));
+                    json.requestPost("api/Appointment/newAppointment",callback,body_arrayList.toArray(new String[]{}));
 
                 }
             }.run();
@@ -253,11 +256,6 @@ public class AddAppointmentActivity extends AppCompatActivity {
                     }
                 });
             }
-
-
-
-
-
         }
     };
 
@@ -307,5 +305,24 @@ public class AddAppointmentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Back();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK)
+        {
+
+           if(data!=null) {
+               Log.d("test","test");
+               String address = data.getStringExtra("address");
+               String detail = data.getStringExtra("detail");
+               double latitude = data.getDoubleExtra("latitude", 0.0);
+               double longitude = data.getDoubleExtra("longitude", 0.0);
+
+               add_appointment_fragment_2.mapSetting(address,detail,latitude,longitude);
+
+           }
+        }
     }
 }

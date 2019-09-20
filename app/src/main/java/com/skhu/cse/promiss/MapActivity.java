@@ -8,7 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +26,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
     NaverMap map;
+
+    RelativeLayout acceptLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        acceptLayout = findViewById(R.id.map_invite_layout);
 
         FragmentManager fm = getSupportFragmentManager();
         MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map);
@@ -71,6 +77,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
         mapFragment.getMapAsync(this);
+    }
+
+    public void showAcceptLayout(){
+        acceptLayout.setVisibility(View.VISIBLE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                findViewById(R.id.map_invite_name).setVisibility(View.VISIBLE);
+                findViewById(R.id.map_invite_accept).setVisibility(View.VISIBLE);
+                findViewById(R.id.map_invite_cancel).setVisibility(View.VISIBLE);
+
+                //추가하는 부분
+
+            }
+        },600);
     }
 
     @Override

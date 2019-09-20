@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
@@ -50,6 +51,9 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
     ArrayList<SearchAddressItem> arrayList = new ArrayList<>();
     RecyclerView recyclerView;
     NaverMap myMap;
+
+    String shortName="";
+    TextView address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,33 +65,14 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
         searchView = findViewById(R.id.searchView);
 
 
-        searchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                Log.d("test", "test");
-            }
+        address = findViewById(R.id.location_setting_address);
 
-            @Override
-            public void onSearchViewClosed() {
-
-            }
-
-            @Override
-            public void onSearchViewShownAnimation() {
-
-            }
-
-            @Override
-            public void onSearchViewClosedAnimation() {
-
-            }
-        });
         searchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) { //서치를 했을때
                 Log.d("SimpleSearchView", "Submit:" + query);
                 final String sQuery = query;
-                recyclerView.setVisibility(View.VISIBLE);
+
                 if (sQuery.equals("")) return false;
                 arrayList.clear();
                 new Thread() {
@@ -129,6 +114,8 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
                 double latitude =item.getLatitude();
                 double longitude = item.getLongitude();
 
+                shortName= item.getName();
+                address.setText(item.getDetail());
                 LatLng location = new LatLng(latitude,longitude);
                 myMap.setCameraPosition(new CameraPosition(location,15));
 
@@ -138,6 +125,22 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
         });
         recyclerView.setAdapter(searchAddressAdapter);
 
+
+        findViewById(R.id.map_setting_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+
+                intent.putExtra("address",shortName);
+                intent.putExtra("detail",address.getText().toString());
+
+                LatLng location=myMap.getCameraPosition().target;
+                intent.putExtra("latitude",location.latitude);
+                intent.putExtra("longitude",location.longitude);
+                setResult(RESULT_OK,intent);
+                finish();
+            }
+        });
 
         searchAddressAdapter.notifyDataSetChanged();
 
@@ -179,14 +182,25 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
                     LocationSettingAcvtivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            recyclerView.setVisibility(View.VISIBLE);
                             searchAddressAdapter.notifyDataSetChanged();
                         }
                     });
                 } else { //실패했을 경우
-
+                    LocationSettingAcvtivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LocationSettingAcvtivity.this, "서버 문제로 불러오기가 실패하였습니다", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             } catch (JSONException e) {
-
+                LocationSettingAcvtivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LocationSettingAcvtivity.this, "서버 문제로 불러오기가 실패하였습니다", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         }
     };

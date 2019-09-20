@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:animateLayoutChanges="true"
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
@@ -16,14 +17,15 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/mainColor2"
+            android:background="@color/mainColor1"
+            app:titleTextColor="#ffffff"
+            android:gravity="center"
             app:title="주소 검색" />
 
         <com.ferfalk.simplesearchview.SimpleSearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
             android:visibility="visible"
             app:type="card"
             app:voiceSearch="true" />
@@ -45,8 +47,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="현재 약속이 없습니다."
+                android:text="위치를 설정해주세요."
                 android:textColor="#ffffff"
+                android:id="@+id/location_setting_address"
                 android:textSize="15sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -59,11 +62,11 @@
 
 
             <Button
-                android:id="@+id/map_add_btn"
+                android:id="@+id/map_setting_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/mainColor3"
-                android:text="약속 만들기"
+                android:text="여기로 설정하기"
                 android:textColor="@color/mainColor2"
                 android:textSize="16sp"
                 android:textStyle="bold" />

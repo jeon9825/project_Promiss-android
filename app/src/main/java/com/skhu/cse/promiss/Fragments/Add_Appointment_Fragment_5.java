@@ -77,6 +77,7 @@ public class Add_Appointment_Fragment_5 extends Fragment {
 
                 String name = item.getName();
 
+                ids.add(item.getId());
                 names.add(name);
                 tagGroup.setTags(names);
             }

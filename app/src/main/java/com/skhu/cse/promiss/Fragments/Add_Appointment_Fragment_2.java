@@ -2,6 +2,7 @@ package com.skhu.cse.promiss.Fragments;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.Marker;
 import com.skhu.cse.promiss.AddAppointmentActivity;
 import com.skhu.cse.promiss.LocationSettingAcvtivity;
 import com.skhu.cse.promiss.R;
@@ -102,6 +106,22 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
         });
     }
 
+    public void mapSetting(String address,String detail,double latitude,double longitude)
+    {
+
+        LatLng latLng = new LatLng(latitude,longitude);
+        naverMap.setCameraPosition(new CameraPosition(latLng,15));
+
+        Marker marker = new Marker();
+        marker.setCaptionText(address);
+        marker.setSubCaptionText(detail);
+        marker.setIconTintColor(getResources().getColor(R.color.mainColor1));
+        marker.setPosition(latLng);
+        marker.setMap(naverMap);
+        this.address.setText(address);
+        this.address_detail.setText(detail);
+    }
+
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap=naverMap;
@@ -111,7 +131,7 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
             public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
                 map_Check=true;
                 Intent intent=new Intent(getActivity(), LocationSettingAcvtivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,AddAppointmentActivity.map_setting);
             }
         });
     }

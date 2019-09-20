@@ -27,6 +27,14 @@
         android:id="@+id/login_center_view"
         android:layout_below="@id/login_promiss">
     </View>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/login_center_view"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/login_login_layout"
+        >
     <TextView
         android:id="@+id/login_text_id"
         android:layout_width="match_parent"
@@ -34,7 +42,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/login_center_view"
         android:text="ID"
         android:textSize="15sp"
         android:textColor="@android:color/white"/>
@@ -108,5 +115,5 @@
         android:textColor="@android:color/white"
         android:background="@android:color/transparent"
         />
-
+    </RelativeLayout>
 </RelativeLayout>
