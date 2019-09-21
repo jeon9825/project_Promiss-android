@@ -10,6 +10,7 @@ public class BasicDB {
         static final String PREF_USER_ID = "user_id";
         static final String PREF_USER_PW = "password";
         static final String PREF_ID="id";
+        static final String PREF_Appoint="appoint";
 
         public static SharedPreferences getSharedPreferences(Context ctx) {
             return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -22,6 +23,18 @@ public class BasicDB {
             editor.putString(PREF_USER_ID, userId);
             editor.putString(PREF_USER_PW, userPw);
             editor.apply();
+        }
+    // 저장된 정보 가져오기
+        public static boolean getAppoint(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_Appoint, false);
+        }
+
+        public static boolean setAppoint(Context ctx,boolean isAppoint)
+        {
+            SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+            editor.putBoolean(PREF_Appoint, isAppoint);
+            editor.apply();
+            return true;
         }
 
         // 저장된 정보 가져오기
