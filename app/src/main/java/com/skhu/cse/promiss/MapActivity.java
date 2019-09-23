@@ -31,7 +31,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,6 +50,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationSource locationSource;
     NaverMap map;
     RelativeLayout acceptLayout;
+    TextView time_textView;
 
     boolean isAppointment = false;
 
@@ -51,6 +59,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        time_textView = findViewById(R.id.map_appoint_time);
         acceptLayout = findViewById(R.id.map_invite_layout);
         if(BasicDB.getAppoint(getApplicationContext())==-1)
         CheckAppointment();
@@ -63,6 +72,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mapFragment = MapFragment.newInstance();
             fm.beginTransaction().add(R.id.map, mapFragment).commit();
         }
+
+
 
         final String[] menu={"로그아웃","비밀번호 변경","회원 탈퇴"};
 
@@ -114,6 +125,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    public void CalculateTime(String date,String time) //시간 계산
+    {
+        Calendar temp = Calendar.getInstance();
+
+
+
+        String[] date_S= date.split("-");
+
+
+        String[] time_S = time.split(":");
+        int minute;
+        int second;
+        int hour;
+
+            GregorianCalendar now = new GregorianCalendar(temp.get(Calendar.YEAR),temp.get(Calendar.MONTH+1),temp.get(Calendar.DAY_OF_MONTH),temp.get(Calendar.HOUR),temp.get(Calendar.MINUTE));
+
+            GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_S[0]),Integer.parseInt(date_S[1]),Integer.parseInt(date_S[2]),Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
+
+            Calendar diff=Calendar.getInstance();
+            diff.setTimeInMillis(now.getTimeInMillis() - appoint.getTimeInMillis());
+
+            hour = diff.get(Calendar.HOUR_OF_DAY);
+           minute = diff.get(Calendar.MINUTE); //분
+           second = diff.get(Calendar.SECOND);//초
+        time_textView.setText(minute+":"+second);
+
+        Timer timer= new Timer();
+        timer.schedule(new AppointTimer(hour,minute,second),0,1000);
+    }
+
     public void GetAppointment(){ //약속 정보 가져오기
 
         isAppointment = true;
@@ -150,22 +191,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(object.getInt("result")==2000) //약속 실행 중
                 {
                     object = object.getJSONObject("data");
-                    ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
-                    ((TextView)findViewById(R.id.map_appoint_address)).setText(object.getString("data"));
+
+                    final String address = object.getString("data");
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
+                            ((TextView)findViewById(R.id.map_appoint_address)).setText(address);
+                        }
+                    });
+
 
                 }else //약속 대기중
                 {
-                    findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
-                    object = object.getJSONObject("data");
-                    ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
-                    ((TextView)findViewById(R.id.map_appoint_address)).setText(object.getString("data"));
 
+
+                    object = object.getJSONObject("message");
+
+                    final String address = object.getString("address");
+                    final String date = object.getString("date");
+                    final String time = object.getString("date_time");
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
+                            ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
+                            ((TextView)findViewById(R.id.map_appoint_address)).setText(address);
+
+                            CalculateTime(date,time);
+                        }
+                    });
                 }
 
 
 
             }catch (JSONException e)
             {
+                e.printStackTrace();
                 MapActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -205,7 +267,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void showAcceptLayout(){
-        acceptLayout.setVisibility(View.VISIBLE);
         String name =AppointmentData.data.getName();
 
 
@@ -213,6 +274,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (name.length() > 8) name = name.substring(0, 8);
             ((TextView) findViewById(R.id.map_invite_name)).setText(name + "에 초대되었습니다.");
         }
+        acceptLayout.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -301,9 +363,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
         }
-    };
+    }; // 초대 알람이 잇는 지 확인하는
 
-    private  Callback accept = new Callback() {
+    private  Callback accept = new Callback() { // 초대 알람 거부 수락 기능
         @Override
         public void onFailure(@NotNull Call call, @NotNull IOException e) {
             MapActivity.this.runOnUiThread(new Runnable() {
@@ -334,6 +396,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     final int appoint_id = object.getInt("id");
                     BasicDB.setAppoint(getApplicationContext(),appoint_id);
 
+                    CalculateTime(object.getString("date"),object.getString("date_time"));
                 }else
                 {
 
@@ -342,12 +405,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }catch (JSONException e)
             {
+
                 MapActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hideAcceptLayout();
                     }
                 });
+
             }
 
         }
@@ -371,4 +436,56 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         naverMap.setLocationSource(locationSource);
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
     }
+
+    class AppointTimer extends TimerTask {
+
+        int hour;
+        int minute;
+        int second;
+
+        public AppointTimer(){
+            this.minute=0; this.second=0;
+            this.hour = 0;
+        }
+        public AppointTimer(int hour,int minute,int second)
+        {
+            this.minute=minute; this.second =second;
+        }
+        @Override
+        public void run() {
+
+            if(second==0) {
+
+                if(minute==0)
+                {
+                    if(hour==0)
+                    {
+                        this.cancel();
+                    }else
+                    {
+                        minute=59;
+                        second=60;
+                    }
+
+                }else
+                {
+                    minute--;
+                    second=60;
+                }
+
+
+            }else
+            {
+                second--;
+            }
+            MapActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    time_textView.setText(minute+":"+second);
+                }
+            });
+
+        }
+    }
+
 }
