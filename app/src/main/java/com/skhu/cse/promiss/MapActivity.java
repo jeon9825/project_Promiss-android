@@ -109,6 +109,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                if(i==0){
                                    BasicDB.setId(getApplicationContext(),-1);
+                                   BasicDB.setAppoint(getApplicationContext(),-1);
                                    Intent intent = new Intent(MapActivity.this, LoginActivity.class);
                                    startActivity(intent);
                                    finish();
