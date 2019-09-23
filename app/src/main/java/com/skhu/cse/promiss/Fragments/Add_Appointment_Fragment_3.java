@@ -57,15 +57,15 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
 
         int hour = now.get(Calendar.HOUR_OF_DAY);
         int minute = now.get(Calendar.MINUTE);
-
+        date=view.findViewById(R.id.frg_appointment_3_t5);
+        time=view.findViewById(R.id.frg_appointment_3_t6);
         date_S = ""+year+"-"+month+"-"+day;
         date.setText(date_S);
         hourOfDay= hour+":"+minute;
         time.setText(hourOfDay);
 
         main=this;
-        date=view.findViewById(R.id.frg_appointment_3_t5);
-        time=view.findViewById(R.id.frg_appointment_3_t6);
+
 
         date.setOnClickListener(view1 -> {
 
