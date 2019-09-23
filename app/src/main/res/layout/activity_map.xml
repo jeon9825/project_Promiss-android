@@ -26,8 +26,23 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
+                android:id="@+id/map_appoint_address"
                 android:layout_margin="10dp"
                 android:text="현재 약속이 없습니다."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/map_appoint_time"
+                android:textColor="@color/mainColor3"
+                android:layout_centerVertical="true"
+                android:text="58:21:10"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                >
+            </TextView>
         </RelativeLayout>
 
         <RelativeLayout

@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,16 +42,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
     NaverMap map;
-
     RelativeLayout acceptLayout;
+
+    boolean isAppointment = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
         acceptLayout = findViewById(R.id.map_invite_layout);
-        if(!BasicDB.getAppoint(getApplicationContext()))
+        if(BasicDB.getAppoint(getApplicationContext())==-1)
         CheckAppointment();
+        else
+        GetAppointment();
 
         FragmentManager fm = getSupportFragmentManager();
         MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map);
@@ -66,8 +73,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(MapActivity.this, AddAppointmentActivity.class);
-                startActivity(intent);
+                TextView textView = (TextView) view;
+
+                if (textView.getText().toString().equals("약속 상세보기")) {
+                    Toast.makeText(MapActivity.this,"상세보기 구현",Toast.LENGTH_LONG).show();
+
+                } else {
+                    Intent intent = new Intent(MapActivity.this, AddAppointmentActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -81,8 +95,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         .setItems(menu, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(MapActivity.this,i+"번째 클릭",Toast.LENGTH_LONG).show();
-                                if(i==2) {
+
+                               if(i==0){
+                                   BasicDB.setId(getApplicationContext(),-1);
+                                   Intent intent = new Intent(MapActivity.this, LoginActivity.class);
+                                   startActivity(intent);
+                                   finish();
+                               }
+                                else if(i==2) {
                                     Intent intent = new Intent(MapActivity.this, DeleteActivity.class);
                                     startActivity(intent);
                                 }
@@ -93,6 +113,71 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
         mapFragment.getMapAsync(this);
     }
+
+    public void GetAppointment(){ //약속 정보 가져오기
+
+        isAppointment = true;
+        new Thread()
+        {
+            @Override
+            public void run() {
+                GetJson json = GetJson.getInstance();
+                json.requestPost("api/Appointment/getAppointment",appoint,"id",BasicDB.getAppoint(getApplicationContext())+"");
+            }
+        }.run();
+    }
+
+    private Callback appoint=new Callback() {
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            MapActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MapActivity.this, "네트워크 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+        }
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+            String result = response.body().string();
+            Log.d("server",result);
+
+            try{
+                JSONObject object = new JSONObject(result);
+
+                if(object.getInt("result")==2000) //약속 실행 중
+                {
+                    object = object.getJSONObject("data");
+                    ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
+                    ((TextView)findViewById(R.id.map_appoint_address)).setText(object.getString("data"));
+
+                }else //약속 대기중
+                {
+                    findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
+                    object = object.getJSONObject("data");
+                    ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
+                    ((TextView)findViewById(R.id.map_appoint_address)).setText(object.getString("data"));
+
+                }
+
+
+
+            }catch (JSONException e)
+            {
+                MapActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MapActivity.this, "네트워크 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+            }
+
+
+        }
+    };
 
     public void CheckAppointment()
     {
@@ -124,8 +209,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String name =AppointmentData.data.getName();
 
 
-        if(name.length()>8)name = name.substring(0,8);
-        ((TextView)findViewById(R.id.map_invite_name)).setText(name+"에 초대되었습니다.");
+        if(name !=null) {
+            if (name.length() > 8) name = name.substring(0, 8);
+            ((TextView) findViewById(R.id.map_invite_name)).setText(name + "에 초대되었습니다.");
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -172,7 +259,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 //추가하는 부분
 
             }
-        },600);
+        },1000);
     }
 
 
@@ -188,6 +275,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             String result = response.body().string();
 
+            Log.d("server",result);
             try{
 
                 JSONObject object = new JSONObject(result);
@@ -195,6 +283,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(object.getInt("result")==2000)
                 {
 
+                    object = object.getJSONObject("data");
                     AppointmentData data = AppointmentData.data;
 
                     data.setName(object.getString("address"));
@@ -228,6 +317,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             String result = response.body().string();
+            Log.d("server",result);
 
             try{
                 MapActivity.this.runOnUiThread(new Runnable() {
@@ -238,9 +328,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 });
 
                 JSONObject object = new JSONObject(result);
-                if(object.getString("result").equals("OK"))
+                if(object.getInt("result")==2000)
                 {
-                    BasicDB.setAppoint(getApplicationContext(),true);
+                    object = object.getJSONObject("data");
+                    final int appoint_id = object.getInt("id");
+                    BasicDB.setAppoint(getApplicationContext(),appoint_id);
 
                 }else
                 {

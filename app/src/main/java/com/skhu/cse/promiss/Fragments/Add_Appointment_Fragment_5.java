@@ -43,16 +43,17 @@ import okhttp3.Response;
 public class Add_Appointment_Fragment_5 extends Fragment {
 
 
-    RecyclerView recyclerView;
-    UserListAdapter adapter;
-    ArrayList<UserItem> arrayList=new ArrayList<>();
-    TagGroup tagGroup;
+    private RecyclerView recyclerView;
+    private UserListAdapter adapter;
+    private ArrayList<UserItem> arrayList=new ArrayList<>();
+    private TagGroup tagGroup;
 
-    ImageButton text_delete;
-    EditText search;
+    private ImageButton text_delete;
+    private EditText search;
 
-    ArrayList<Integer> ids=new ArrayList<>();
-    ArrayList<String> names=new ArrayList<>();
+    private ArrayList<Integer> ids=new ArrayList<>();
+    private ArrayList<String> names=new ArrayList<>();
+
     public Add_Appointment_Fragment_5() {
         // Required empty public constructor
     }

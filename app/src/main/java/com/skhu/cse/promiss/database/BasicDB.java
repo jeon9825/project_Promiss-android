@@ -2,6 +2,7 @@ package com.skhu.cse.promiss.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 public class BasicDB {
@@ -22,18 +23,18 @@ public class BasicDB {
             editor.putInt(PREF_ID,id);
             editor.putString(PREF_USER_ID, userId);
             editor.putString(PREF_USER_PW, userPw);
-            editor.apply();
+            editor.commit();
         }
     // 저장된 정보 가져오기
-        public static boolean getAppoint(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_Appoint, false);
+        public static int getAppoint(Context ctx) {
+        return getSharedPreferences(ctx).getInt(PREF_Appoint, -1);
         }
 
-        public static boolean setAppoint(Context ctx,boolean isAppoint)
+        public static boolean setAppoint(Context ctx,int Appoint)
         {
             SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-            editor.putBoolean(PREF_Appoint, isAppoint);
-            editor.apply();
+            editor.putInt(PREF_Appoint, Appoint);
+            editor.commit();
             return true;
         }
 
@@ -46,12 +47,20 @@ public class BasicDB {
         {
             return getSharedPreferences(ctx).getInt(PREF_ID,-1);
         }
+
+        public static void setId(Context ctx,int id)
+        {
+            SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+            editor.putInt(PREF_ID, id);
+            editor.commit();
+
+        }
         public static boolean setUserId(Context ctx,String ID)
         {
             SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
             editor.putString(PREF_USER_ID, ID);
 
-            editor.apply();
+            editor.commit();
             return true;
         }
         public static boolean setUserPW(Context ctx,String pw)
@@ -59,7 +68,7 @@ public class BasicDB {
             SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
             editor.putString(PREF_USER_PW, pw);
 
-            editor.apply();
+            editor.commit();
             return true;
         }
         public static String getUserPw(Context ctx) {
@@ -67,10 +76,11 @@ public class BasicDB {
         }
 
         // 정보 삭제
+
         public static void clearUserInfo(Context ctx) {
             SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
             editor.clear();
-            editor.apply();
+            editor.commit();
         }
 
 }

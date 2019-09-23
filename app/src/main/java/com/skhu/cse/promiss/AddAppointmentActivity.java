@@ -22,6 +22,7 @@ import com.skhu.cse.promiss.Fragments.Add_Appointment_Fragment_6;
 import com.skhu.cse.promiss.Items.AppointmentItem;
 import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.custom.PromissDialog;
+import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.server.GetJson;
 
 import org.jetbrains.annotations.NotNull;
@@ -194,6 +195,7 @@ public class AddAppointmentActivity extends AppCompatActivity {
                         body_arrayList.add(integers.get(i).toString());
                     }
 
+                    Log.d("body",Arrays.toString(body_arrayList.toArray(new String[]{})));
                     json.requestPost("api/Appointment/newAppointment",callback,body_arrayList.toArray(new String[]{}));
 
                 }
@@ -225,9 +227,12 @@ public class AddAppointmentActivity extends AppCompatActivity {
                 if(object.getInt("result")==2000)
                 {
 
+                    object = object.getJSONObject("data");
+                    final int appoint_id = object.getInt("id");
                     AddAppointmentActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            BasicDB.setAppoint(getApplicationContext(),appoint_id);
                             Toast.makeText(AddAppointmentActivity.this, "약속 생성에 성공하였습니다.", Toast.LENGTH_LONG).show();
                             finish();
                         }

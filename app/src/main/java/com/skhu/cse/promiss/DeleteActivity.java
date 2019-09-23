@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.skhu.cse.promiss.custom.PromissDialog;
+import com.skhu.cse.promiss.database.BasicDB;
 
 public class DeleteActivity extends AppCompatActivity {
 
@@ -53,6 +54,7 @@ public class DeleteActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 UserDeleteSuccess();
+                                BasicDB.setId(getApplicationContext(),-1);
                                 builder.dismiss();
                             }
                         }).build();

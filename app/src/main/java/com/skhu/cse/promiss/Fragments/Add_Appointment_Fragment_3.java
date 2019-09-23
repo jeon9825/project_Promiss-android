@@ -29,8 +29,9 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
     TextView date;
     TextView time;
     Fragment main;
-
+    Calendar now;
     String hourOfDay;
+    String date_S;
     public Add_Appointment_Fragment_3() {
         // Required empty public constructor
     }
@@ -48,6 +49,20 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         super.onViewCreated(view, savedInstanceState);
 
 
+        now = Calendar.getInstance();
+
+        int year=now.get(Calendar.YEAR);
+        int month = now.get(Calendar.MONTH)+1;
+        int day = now.get(Calendar.DAY_OF_MONTH);
+
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+
+        date_S = ""+year+"-"+month+"-"+day;
+        date.setText(date_S);
+        hourOfDay= hour+":"+minute;
+        time.setText(hourOfDay);
+
         main=this;
         date=view.findViewById(R.id.frg_appointment_3_t5);
         time=view.findViewById(R.id.frg_appointment_3_t6);
@@ -56,7 +71,7 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
 
             if(getFragmentManager().findFragmentByTag("Datepickerdialog")==null) {
 
-                Calendar now = Calendar.getInstance();
+                now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
                         (DatePickerDialog.OnDateSetListener) main,
                         now.get(Calendar.YEAR), // Initial year selection
@@ -87,18 +102,18 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
             @Override
             public void onClick(View view) {
                 //넘어가는 부분
-                ((AddAppointmentActivity)getActivity()).setAppointment_Date(date.getText().toString(),hourOfDay);
+                ((AddAppointmentActivity)getActivity()).setAppointment_Date(date_S,hourOfDay);
                 ((AddAppointmentActivity)getActivity()).Next();
             }
         });
     }
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date_S ;
+        String temp ;
 
-        date_S=""+year+"."+(monthOfYear+1)+"."+dayOfMonth;
-
-        date.setText(date_S);
+        temp=""+year+"."+(monthOfYear+1)+"."+dayOfMonth;
+        date_S = ""+year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
+        date.setText(temp);
     }
 
     @Override

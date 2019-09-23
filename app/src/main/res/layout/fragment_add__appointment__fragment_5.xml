@@ -85,6 +85,8 @@
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:textColorHint="#ffffff"
+        android:textSize="15sp"
         android:paddingRight="10dp"
         android:hint="아이디 검색"
         android:id="@+id/frg_appointment_5_search"
