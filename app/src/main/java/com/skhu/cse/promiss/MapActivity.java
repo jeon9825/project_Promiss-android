@@ -87,8 +87,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 TextView textView = (TextView) view;
 
                 if (textView.getText().toString().equals("약속 상세보기")) {
-                    Toast.makeText(MapActivity.this,"상세보기 구현",Toast.LENGTH_LONG).show();
-
+                    Intent intent = new Intent(MapActivity.this,DetailActivity.class);
+                    startActivity(intent);
                 } else {
                     Intent intent = new Intent(MapActivity.this, AddAppointmentActivity.class);
                     startActivity(intent);

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainColor2"
+    tools:context=".DetailActivity">
+
+    <RelativeLayout
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_toolbar"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_friend">
+
+            <Button
+                android:id="@+id/detail_button_exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/mainColor3"
+                android:text="약속 나가기"
+                android:textColor="@color/mainColor2"
+                android:textSize="17sp"
+                android:textStyle="bold"></Button>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/detail_location_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_name"
+            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="147dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@id/detail_location">
+
+            <TextView
+                android:id="@+id/detail_location_address1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="서울특별시 구로구 항동 1-1"
+                android:textColor="#ffffff"
+                android:textSize="15sp"></TextView>
+
+            <TextView
+                android:id="@+id/detail_location_address2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_location_address1"
+                android:layout_marginTop="10dp"
+                android:text="상세 주소"
+                android:textColor="#ffffff"
+                android:textSize="15sp"></TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_location_address">
+
+            <TextView
+                android:id="@+id/detail_text_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="날짜"
+                android:textColor="#ffffff"
+                android:textSize="17sp"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/detail_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/detail_text_date"
+                android:text="2019.12.31 (수)"
+                android:textColor="#ffffff"
+                android:textSize="15sp"></TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date">
+
+            <TextView
+                android:id="@+id/detail_text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="시간"
+                android:textColor="#ffffff"
+                android:textSize="17sp"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/detail_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/detail_text_time"
+                android:text="오후 04:30"
+                android:textColor="#ffffff"
+                android:textSize="15sp"></TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time">
+
+            <TextView
+                android:id="@+id/detail_text_fine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="벌금"
+                android:textColor="#ffffff"
+                android:textSize="17sp"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/detail_fine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/detail_text_fine"
+                android:text="5분마다 500원"
+                android:textColor="#ffffff"
+                android:textSize="15sp"></TextView>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_name"
+            android:layout_margin="10dp"
+            android:text="장소"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold"></TextView>
+
+
+        <TextView
+            android:id="@+id/detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="약속이름"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"></TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detail_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fine"
+            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"></androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mainColor1">
+
+        <ImageButton
+            android:id="@+id/delete_close"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/close" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="상세 정보"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</RelativeLayout>
