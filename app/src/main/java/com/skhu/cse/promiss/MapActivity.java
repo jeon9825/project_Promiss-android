@@ -146,7 +146,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Calendar diff=Calendar.getInstance();
             diff.setTimeInMillis(now.getTimeInMillis() - appoint.getTimeInMillis());
 
-            hour = diff.get(Calendar.HOUR_OF_DAY);
+            hour = diff.get(Calendar.HOUR_OF_DAY)*diff.get(Calendar.DAY_OF_YEAR);
+
            minute = diff.get(Calendar.MINUTE); //분
            second = diff.get(Calendar.SECOND);//초
         time_textView.setText(minute+":"+second);
@@ -449,7 +450,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         public AppointTimer(int hour,int minute,int second)
         {
-            this.minute=minute; this.second =second;
+            this.hour=hour;this.minute=minute; this.second =second;
         }
         @Override
         public void run() {
@@ -481,7 +482,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             MapActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    time_textView.setText(minute+":"+second);
+                    time_textView.setText(hour+":"+minute+":"+second);
                 }
             });
 
