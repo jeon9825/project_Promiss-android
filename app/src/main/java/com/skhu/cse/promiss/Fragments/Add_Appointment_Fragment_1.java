@@ -56,10 +56,11 @@ public class Add_Appointment_Fragment_1 extends Fragment {
                     Toast.makeText(getActivity(),"이름을 입력해주세요",Toast.LENGTH_LONG).show();
                 }else
                 {
-                    //넘어가는 부분
-                    ((AddAppointmentActivity)getActivity()).Next();
                     //약속 이름 저장
                     ((AddAppointmentActivity)getActivity()).setAppointmentName(result);
+                    //넘어가는 부분
+                    ((AddAppointmentActivity)getActivity()).Next();
+
                 }
             }
         });
