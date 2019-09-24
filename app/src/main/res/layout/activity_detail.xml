@@ -172,14 +172,24 @@
             android:id="@+id/detail_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fine"
+            android:layout_below="@id/detail_count"
             android:layout_margin="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"></androidx.recyclerview.widget.RecyclerView>
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/detail_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fine"
+            android:layout_alignParentRight="true"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:layout_margin="10dp"
+            android:text="n명"/>
 
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/detail_toolbar"
         android:layout_width="match_parent"

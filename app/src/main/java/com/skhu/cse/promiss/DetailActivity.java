@@ -27,6 +27,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView textViewDate;
     TextView textViewTime;
     TextView textViewFine;
+    TextView textViewCount; //사람명수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class DetailActivity extends AppCompatActivity {
         textViewDate = findViewById(R.id.detail_date);
         textViewTime = findViewById(R.id.detail_time);
         textViewFine = findViewById(R.id.detail_fine);
+        textViewCount=findViewById(R.id.detail_count);
+
         new Thread() {
             @Override
             public void run() {
