@@ -210,7 +210,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     object = object.getJSONObject("message");
 
-                    final String address = object.getString("address");
+                    final String name = object.getString("name");
                     final String date = object.getString("date");
                     final String time = object.getString("date_time");
                     MapActivity.this.runOnUiThread(new Runnable() {
@@ -218,11 +218,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         public void run() {
                             findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
                             ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
-                            ((TextView)findViewById(R.id.map_appoint_address)).setText(address);
-
-                            CalculateTime(date,time);
+                            ((TextView)findViewById(R.id.map_appoint_address)).setText(name);
                         }
+
                     });
+                    CalculateTime(date,time);
                 }
 
 
@@ -398,7 +398,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     final int appoint_id = object.getInt("id");
                     BasicDB.setAppoint(getApplicationContext(),appoint_id);
 
-                    CalculateTime(object.getString("date"),object.getString("date_time"));
+
+                    final String name = object.getString("name");
+                    final String date = object.getString("date");
+                    final String time = object.getString("date_time");
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
+                            ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
+                            ((TextView)findViewById(R.id.map_appoint_address)).setText(name);
+                        }
+                    });
+
+                    CalculateTime(date,time);
                 }else
                 {
 
