@@ -140,28 +140,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         String[] time_S = time.split(":");
-        int minute;
-        int second;
-        int hour;
 
-            GregorianCalendar now = new GregorianCalendar(temp.get(Calendar.YEAR),temp.get(Calendar.MONTH+1),temp.get(Calendar.DAY_OF_MONTH),temp.get(Calendar.HOUR),temp.get(Calendar.MINUTE));
+
+            GregorianCalendar now = new GregorianCalendar(temp.get(Calendar.YEAR),temp.get(Calendar.MONTH)+1,temp.get(Calendar.DAY_OF_MONTH),temp.get(Calendar.HOUR_OF_DAY),temp.get(Calendar.MINUTE));
 
             GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_S[0]),Integer.parseInt(date_S[1]),Integer.parseInt(date_S[2]),Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
 
-        long diff =now.getTimeInMillis()-appoint.getTimeInMillis();
 
-//            hour = diff.get(Calendar.HOUR_OF_DAY)*diff.get(Calendar.DAY_OF_YEAR);
+        Log.d("now",now.get(Calendar.YEAR)+"-"+now.get(Calendar.MONTH)+"-"+now.get(Calendar.DAY_OF_MONTH)+" "+now.get(Calendar.HOUR_OF_DAY)+":"+now.get(Calendar.MINUTE)+":"+now.get(Calendar.SECOND));
+        Log.d("that",appoint.get(Calendar.YEAR)+"-"+appoint.get(Calendar.MONTH)+"-"+appoint.get(Calendar.DAY_OF_MONTH)+" "+appoint.get(Calendar.HOUR_OF_DAY)+":"+appoint.get(Calendar.MINUTE)+":"+appoint.get(Calendar.SECOND));
+
+           long diff=now.getTimeInMillis()-appoint.getTimeInMillis();
+        long sec = diff / 1000;
+        long min = diff / (60 * 1000);
+        long hour = diff / (60 * 60 * 1000);
+        long day = diff / (24 * 60 * 60 * 1000);
 
 
-        Log.d("now",now.get(Calendar.YEAR)+"-"+now.get(Calendar.MINUTE)+"-"+now.get(Calendar.DAY_OF_MONTH)+" "+now.get(Calendar.HOUR_OF_DAY)+":"+now.get(Calendar.MINUTE)+":"+now.get(Calendar.SECOND));
-        Log.d("that",appoint.get(Calendar.YEAR)+"-"+appoint.get(Calendar.MINUTE)+"-"+appoint.get(Calendar.DAY_OF_MONTH)+" "+appoint.get(Calendar.HOUR_OF_DAY)+":"+appoint.get(Calendar.MINUTE)+":"+appoint.get(Calendar.SECOND));
-            Log.d("hour", ""+ diff / (24 * 60 * 60 * 1000));
-//           minute = diff.get(Calendar.MINUTE); //분
-//           second = diff.get(Calendar.SECOND);//초
-//        time_textView.setText(minute+":"+second);
-
-//        Timer timer= new Timer();
-//        timer.schedule(new AppointTimer(hour,minute,second),0,1000);
+        Timer timer= new Timer();
+        timer.schedule(new AppointTimer((int)(hour - day*24),(int)(min - hour*60), (int)(sec - min*60)),0,1000);
     }
 
     public void GetAppointment(){ //약속 정보 가져오기
