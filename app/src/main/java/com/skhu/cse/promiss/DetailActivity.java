@@ -79,6 +79,7 @@ public class DetailActivity extends AppCompatActivity {
                 arr[0] = intHour >= 12 ? intHour - 12 + "" : intHour + "";
                 String timeText = ampm+arr[0]+":"+arr[1];
                 String fine = object.getInt("Fine_time") + "분마다 " + object.getInt("Fine_money") + "원";
+
                 DetailActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

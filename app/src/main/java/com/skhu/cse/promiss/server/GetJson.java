@@ -46,7 +46,7 @@ public class GetJson {
         client.newCall(request).enqueue(callback); //통신후 콜백될 함수
     }
 
-    //네이버 지도에서 쓰일 메소드
+    //지도 주소 검색
     public void requestMapApi(Callback callback, String ...parameter){
         String URL = "https://naveropenapi.apigw.ntruss.com/map-place/v1/search?"; //네이버 지도 API 주소
 
@@ -59,4 +59,20 @@ public class GetJson {
                 .build();
         client.newCall(request).enqueue(callback); //통신후 콜백될 함수
     }
+
+    //지도로부터 위도 경도 얻어오기
+    public void requestLO(Callback callback, String ...parameter){
+        String URL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?"; //네이버 지도 API 주소
+
+        URL +="coords="+parameter[0]+"&output=json";
+
+        Request request = new Request.Builder()
+                .url(URL) //통신하고자하는 url
+                .addHeader("X-NCP-APIGW-API-KEY-ID","ke4acfug28")
+                .addHeader("X-NCP-APIGW-API-KEY","Q2CkzTpLxk7XKxEKn6GVIUPH1HTYsl8cKj7l15tn")
+                .build();
+        client.newCall(request).enqueue(callback); //통신후 콜백될 함수
+    }
+
+
 }
