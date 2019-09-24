@@ -188,7 +188,7 @@
         android:background="@color/mainColor1">
 
         <ImageButton
-            android:id="@+id/delete_close"
+            android:id="@+id/detail_close"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"

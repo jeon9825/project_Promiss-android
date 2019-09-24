@@ -4,7 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.channel.SubscriptionEventListener;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -144,17 +148,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_S[0]),Integer.parseInt(date_S[1]),Integer.parseInt(date_S[2]),Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
 
-            Calendar diff=Calendar.getInstance();
-            diff.setTimeInMillis(now.getTimeInMillis() - appoint.getTimeInMillis());
+        long diff =now.getTimeInMillis()-appoint.getTimeInMillis();
 
-            hour = diff.get(Calendar.HOUR_OF_DAY)*diff.get(Calendar.DAY_OF_YEAR);
+//            hour = diff.get(Calendar.HOUR_OF_DAY)*diff.get(Calendar.DAY_OF_YEAR);
 
-           minute = diff.get(Calendar.MINUTE); //분
-           second = diff.get(Calendar.SECOND);//초
-        time_textView.setText(minute+":"+second);
 
-        Timer timer= new Timer();
-        timer.schedule(new AppointTimer(hour,minute,second),0,1000);
+        Log.d("now",now.get(Calendar.YEAR)+"-"+now.get(Calendar.MINUTE)+"-"+now.get(Calendar.DAY_OF_MONTH)+" "+now.get(Calendar.HOUR_OF_DAY)+":"+now.get(Calendar.MINUTE)+":"+now.get(Calendar.SECOND));
+        Log.d("that",appoint.get(Calendar.YEAR)+"-"+appoint.get(Calendar.MINUTE)+"-"+appoint.get(Calendar.DAY_OF_MONTH)+" "+appoint.get(Calendar.HOUR_OF_DAY)+":"+appoint.get(Calendar.MINUTE)+":"+appoint.get(Calendar.SECOND));
+            Log.d("hour", ""+ diff / (24 * 60 * 60 * 1000));
+//           minute = diff.get(Calendar.MINUTE); //분
+//           second = diff.get(Calendar.SECOND);//초
+//        time_textView.setText(minute+":"+second);
+
+//        Timer timer= new Timer();
+//        timer.schedule(new AppointTimer(hour,minute,second),0,1000);
     }
 
     public void GetAppointment(){ //약속 정보 가져오기
@@ -168,6 +175,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 json.requestPost("api/Appointment/getAppointment",appoint,"id",BasicDB.getAppoint(getApplicationContext())+"");
             }
         }.run();
+    }
+
+    public void SetGameSetiing(){
+
+
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap3");
+        Pusher pusher = new Pusher("cb4bcb99bfc3727bdfb0", options);
+
+        Channel channel = pusher.subscribe("my-channel");
+
+        channel.bind("my-event", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(PusherEvent event) {
+                String data= event.getData();
+            }
+
+//            public void onEvent(String channelName, String eventName, final String data) {
+//                System.out.println(data);
+//            }
+        });
+
+
+
+        pusher.connect();
+
+
     }
 
     private Callback appoint=new Callback() {
@@ -194,22 +228,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 {
                     object = object.getJSONObject("data");
 
-                    final String address = object.getString("data");
-                    MapActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
-                            ((TextView)findViewById(R.id.map_appoint_address)).setText(address);
-                        }
-                    });
-
-
-                }else //약속 대기중
-                {
-
-
-                    object = object.getJSONObject("message");
-
                     final String name = object.getString("name");
                     final String date = object.getString("date");
                     final String time = object.getString("date_time");
@@ -223,6 +241,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     });
                     CalculateTime(date,time);
+
+
+
+
+
+                }else //약속 대기중 or 끝남
+                {
+
+
+                    object = object.getJSONObject("message");
+
+
+                    if(object.getInt("status")==0) {
+                        final String name = object.getString("name");
+                        final String date = object.getString("date");
+                        final String time = object.getString("date_time");
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
+                                ((TextView) findViewById(R.id.map_add_btn)).setText("약속 상세보기");
+                                ((TextView) findViewById(R.id.map_appoint_address)).setText(name);
+                            }
+
+                        });
+                        CalculateTime(date, time);
+                    }else //약속 끝남
+                    {
+                        BasicDB.setAppoint(getApplicationContext(),-1);
+                    }
                 }
 
 
@@ -350,7 +398,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     object = object.getJSONObject("data");
                     AppointmentData data = AppointmentData.data;
 
-                    data.setName(object.getString("address"));
+                    data.setName(object.getString("name"));
 
                         MapActivity.this.runOnUiThread(new Runnable() {
                             @Override

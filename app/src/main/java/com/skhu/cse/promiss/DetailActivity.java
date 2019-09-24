@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,12 @@ public class DetailActivity extends AppCompatActivity {
         textViewFine = findViewById(R.id.detail_fine);
         recyclerView = findViewById(R.id.detail_friend);
 
+        findViewById(R.id.detail_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         adapter = new UserListAdapter(this,arrayList);
 
