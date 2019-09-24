@@ -43,4 +43,8 @@ dependencies {
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
     //search layout
     implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
+
+    dependencies {
+        implementation 'com.pusher:pusher-java-client:2.0.1'
+    }
 }

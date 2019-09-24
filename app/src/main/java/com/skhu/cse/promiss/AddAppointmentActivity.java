@@ -171,6 +171,7 @@ public class AddAppointmentActivity extends AppCompatActivity {
                     GetJson json=GetJson.getInstance();
 
                     String[] body = new String[]{
+                            "name",item.getName(),
                             "id", UserData.shared.getId()+"",
                             "address",item.getAddress(),
                             "detail",item.getAddress_detail(),
@@ -319,7 +320,7 @@ public class AddAppointmentActivity extends AppCompatActivity {
         {
 
            if(data!=null) {
-               Log.d("test","test");
+
                String address = data.getStringExtra("address");
                String detail = data.getStringExtra("detail");
                double latitude = data.getDoubleExtra("latitude", 0.0);

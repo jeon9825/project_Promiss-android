@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.keyboard.SoftKeyboard;
 import com.skhu.cse.promiss.server.GetJson;
 
@@ -133,8 +134,12 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 JSONObject object = new JSONObject(result);
 
-                if (object.getString("result").equals("OK")) { //성공
-//                    =object.getString("data")
+                if (object.getInt("result")==2000) { //성공
+                   object =object.getJSONObject("data");
+                    BasicDB.setUserInfo(getApplicationContext(),object.getString("user_id"),object.getString("user_pw"),object.getInt("id"));
+
+                    BasicDB.setAppoint(getApplicationContext(),-1);
+
                     Intent intent = new Intent(RegisterActivity.this, MapActivity.class);
                     startActivity(intent);
                     finish();

@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSoftKeyboardShow() {
-                Log.d("키보드","올라감");
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
