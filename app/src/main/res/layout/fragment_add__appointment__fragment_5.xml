@@ -11,14 +11,14 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
         android:id="@+id/frg_appointment_5_t1"
+        android:layout_width="38dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Step 5"
         android:textColor="#ffffff"
-        android:textStyle="bold"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -50,10 +50,11 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
     SearchAddressAdapter searchAddressAdapter;
     ArrayList<SearchAddressItem> arrayList = new ArrayList<>();
     RecyclerView recyclerView;
-    NaverMap myMap;
+    NaverMap myMap; //MAP API
 
     String shortName="";
     TextView address;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +64,6 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
         setSupportActionBar(toolbar);
 
         searchView = findViewById(R.id.searchView);
-
-
         address = findViewById(R.id.location_setting_address);
 
         searchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
@@ -129,16 +128,17 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
         findViewById(R.id.map_setting_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = getIntent();
+                  new Thread(){
+                      @Override
+                      public void run() {
+                          super.run();
+                          GetJson getJson = GetJson.getInstance();
+                          Double latitude=myMap.getCameraPosition().target.latitude;
+                          Double longitude = myMap.getCameraPosition().target.longitude;
+                          getJson.requestLO(LOcallback,longitude+","+latitude);
+                      }
+                  }.run();
 
-                intent.putExtra("address",shortName);
-                intent.putExtra("detail",address.getText().toString());
-
-                LatLng location=myMap.getCameraPosition().target;
-                intent.putExtra("latitude",location.latitude);
-                intent.putExtra("longitude",location.longitude);
-                setResult(RESULT_OK,intent);
-                finish();
             }
         });
 
@@ -246,4 +246,50 @@ public class LocationSettingAcvtivity extends AppCompatActivity implements OnMap
     public void onMapReady(@NonNull NaverMap naverMap) {
         myMap = naverMap;
     }
+
+    public Callback LOcallback = new Callback(){
+
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            String result = response.body().string();
+            Log.d("server response:", result);
+
+            try{
+                JSONObject object = new JSONObject(result);
+                if(object.getJSONObject("status").getInt("code")==0){
+                    JSONObject area=object.getJSONArray("results").getJSONObject(0).getJSONObject("region");
+                    String area1=area.getJSONObject("area1").getString("name");
+                    String area2=area.getJSONObject("area2").getString("name");
+                    String area3=area.getJSONObject("area3").getString("name");
+                    String area4=area.getJSONObject("area4").getString("name");
+                    shortName = area1+" "+area2+" "+area3;
+
+                    Intent intent = getIntent();
+
+                    intent.putExtra("address",shortName);
+                    intent.putExtra("detail",area4);
+
+                    LatLng location=myMap.getCameraPosition().target;
+                    intent.putExtra("latitude",location.latitude);
+                    intent.putExtra("longitude",location.longitude);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }else{
+
+                }
+            }catch (JSONException e){
+            e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            LocationSettingAcvtivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LocationSettingAcvtivity.this, "네트워크 연결 실패", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    };
 }

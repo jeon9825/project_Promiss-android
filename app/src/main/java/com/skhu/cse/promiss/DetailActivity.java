@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +36,8 @@ public class DetailActivity extends AppCompatActivity {
     TextView textViewDate;
     TextView textViewTime;
     TextView textViewFine;
-
+    TextView textViewCount; //사람명수
+    ImageButton imageButtonAdd;
     RecyclerView recyclerView;
     UserListAdapter adapter;
 
@@ -49,7 +53,19 @@ public class DetailActivity extends AppCompatActivity {
         textViewDate = findViewById(R.id.detail_date);
         textViewTime = findViewById(R.id.detail_time);
         textViewFine = findViewById(R.id.detail_fine);
+        textViewCount = findViewById(R.id.detail_count);
+
+        imageButtonAdd=findViewById(R.id.detail_add_friend);
         recyclerView = findViewById(R.id.detail_friend);
+
+        imageButtonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailActivity.this, AddFriendActivity.class);
+                intent.putExtra("data",arrayList);
+                startActivity(intent);
+            }
+        });
 
         findViewById(R.id.detail_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +74,10 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new UserListAdapter(this,arrayList);
+        adapter = new UserListAdapter(this, arrayList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
         new Thread() {
             @Override
             public void run() {
@@ -102,16 +117,14 @@ public class DetailActivity extends AppCompatActivity {
                 Integer intHour = Integer.parseInt(arr[0]);
                 String ampm = intHour >= 12 ? "오후 " : "오전 ";
                 arr[0] = intHour >= 12 ? intHour - 12 + "" : intHour + "";
-                String timeText = ampm+arr[0]+":"+arr[1];
+                String timeText = ampm + arr[0] + ":" + arr[1];
                 String fine = object.getInt("Fine_time") + "분마다 " + object.getInt("Fine_money") + "원";
-
                 JSONArray members = object.getJSONArray("members");
 
-                for(int i = 0;i<members.length();i++)
-                {
+                for (int i = 0; i < members.length(); i++) {
 
                     JSONObject item = members.getJSONObject(i);
-                    arrayList.add( new UserItem(item.getInt("id"),item.getString("user_id"),true));
+                    arrayList.add(new UserItem(item.getInt("id"), item.getString("user_id"), true));
 
                 }
 
@@ -123,7 +136,7 @@ public class DetailActivity extends AppCompatActivity {
                         textViewDate.setText(date);
                         textViewTime.setText(timeText);
                         textViewFine.setText(fine);
-
+                        textViewCount.setText(members.length()+"명");
                         adapter.notifyDataSetChanged();
                     }
                 });

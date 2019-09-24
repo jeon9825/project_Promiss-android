@@ -146,16 +146,31 @@
                 android:textSize="15sp"></TextView>
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/detail_location"
+        <RelativeLayout
+            android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/detail_name"
-            android:layout_margin="10dp"
-            android:text="장소"
-            android:textColor="#ffffff"
-            android:textSize="17sp"
-            android:textStyle="bold"></TextView>
+            android:layout_below="@id/fine"
+            android:layout_alignParentRight="true">
+
+            <ImageButton
+                android:id="@+id/detail_add_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/detail_count"
+                android:background="@null"
+                android:src="@drawable/add" />
+
+            <TextView
+                android:id="@+id/detail_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="n명"
+                android:textColor="#ffffff"
+                android:textSize="17sp" />
+        </RelativeLayout>
 
 
         <TextView
@@ -168,17 +183,30 @@
             android:textSize="20sp"
             android:textStyle="bold"></TextView>
 
+        <TextView
+            android:id="@+id/detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_name"
+            android:layout_margin="10dp"
+            android:text="장소"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold"></TextView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/detail_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fine"
+            android:layout_below="@id/count"
             android:layout_margin="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:background="#ffffff"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_marginBottom="10dp"
+            android:background="#ffffff"></androidx.recyclerview.widget.RecyclerView>
+
+
     </RelativeLayout>
 
     <RelativeLayout
