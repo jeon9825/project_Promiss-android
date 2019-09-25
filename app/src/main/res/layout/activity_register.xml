@@ -99,7 +99,7 @@
             android:id="@+id/register_pw_condition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="비밀번호는 6~12자 이내로 설정해주세요. "
+            android:text="비밀번호는 6~18자 이내로 설정해주세요. "
             android:textColor="@color/error"
             android:layout_alignParentRight="true"
             android:layout_alignBottom="@id/register_text_password"/>

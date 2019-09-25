@@ -35,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText editText_PW;
     EditText editText_PW_check;
     TextView textView_ID_check;
+    TextView textView_PW_condition;
     TextView textView_PW_check;
     InputMethodManager inputManager;
     RelativeLayout loginView;
@@ -68,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         textView_ID_check = findViewById(R.id.register_id_check);
         textView_ID_check.setVisibility(View.GONE);  // 이미 존재하는 ID입니다. GONE
         editText_PW = findViewById(R.id.register_edit_password);
+        textView_PW_condition = findViewById(R.id.register_pw_condition); //비밀번호는 6~18자
         editText_PW_check = findViewById(R.id.register_edit_password_check);
         textView_PW_check = findViewById(R.id.register_pw_check);
         Button button_OK = findViewById(R.id.register_button_ok);
@@ -93,6 +95,25 @@ public class RegisterActivity extends AppCompatActivity {
                 }.run();
             }
         });
+        editText_PW.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editText_PW.getText().toString().length()>=6&&editText_PW.getText().toString().length()<=18) {
+                    textView_PW_condition.setVisibility(View.GONE);
+                }
+            }
+        });
+
         editText_PW_check.addTextChangedListener(new TextWatcher() { //키보드 입력받으면서 비밀번호 확인
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

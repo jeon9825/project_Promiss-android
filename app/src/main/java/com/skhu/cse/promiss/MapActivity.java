@@ -120,6 +120,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                    startActivity(intent);
                                    finish();
                                }
+                               else if(i==1){
+                                   Intent intent = new Intent(MapActivity.this,ChangePassword.class);
+                                   startActivity(intent);
+                               }
                                 else if(i==2) {
                                     Intent intent = new Intent(MapActivity.this, DeleteActivity.class);
                                     startActivity(intent);
