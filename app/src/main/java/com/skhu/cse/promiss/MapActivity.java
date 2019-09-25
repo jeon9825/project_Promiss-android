@@ -146,11 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_S[0]),Integer.parseInt(date_S[1]),Integer.parseInt(date_S[2]),Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
 
-
-        Log.d("now",now.get(Calendar.YEAR)+"-"+now.get(Calendar.MONTH)+"-"+now.get(Calendar.DAY_OF_MONTH)+" "+now.get(Calendar.HOUR_OF_DAY)+":"+now.get(Calendar.MINUTE)+":"+now.get(Calendar.SECOND));
-        Log.d("that",appoint.get(Calendar.YEAR)+"-"+appoint.get(Calendar.MONTH)+"-"+appoint.get(Calendar.DAY_OF_MONTH)+" "+appoint.get(Calendar.HOUR_OF_DAY)+":"+appoint.get(Calendar.MINUTE)+":"+appoint.get(Calendar.SECOND));
-
-           long diff=now.getTimeInMillis()-appoint.getTimeInMillis();
+            long diff=appoint.getTimeInMillis()-now.getTimeInMillis();
         long sec = diff / 1000;
         long min = diff / (60 * 1000);
         long hour = diff / (60 * 60 * 1000);
@@ -158,7 +154,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         Timer timer= new Timer();
-        timer.schedule(new AppointTimer((int)(hour - day*24),(int)(min - hour*60), (int)(sec - min*60)),0,1000);
+        timer.schedule(new AppointTimer((int)((hour - day*24)+(24*day)),(int)(min - hour*60), (int)(sec - min*60)),0,1000);
     }
 
     public void GetAppointment(){ //약속 정보 가져오기

@@ -110,6 +110,7 @@ public class DetailActivity extends AppCompatActivity {
             try {
                 JSONObject object = new JSONObject(result);
                 object = object.getJSONObject("data");
+                String name = object.getString("name");
                 String address1 = object.getString("address");
                 String date = object.getString("date");
                 String time = object.getString("date_time");
@@ -131,7 +132,7 @@ public class DetailActivity extends AppCompatActivity {
                 DetailActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        textViewName.setText(name);
                         textViewAddress1.setText(address1);
                         textViewDate.setText(date);
                         textViewTime.setText(timeText);
