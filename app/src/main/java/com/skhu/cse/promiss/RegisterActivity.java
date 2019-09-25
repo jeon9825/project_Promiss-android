@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (object.getInt("result")==2000) { //성공
                    object =object.getJSONObject("data");
-                    BasicDB.setUserInfo(getApplicationContext(),object.getString("user_id"),object.getString("user_pw"),object.getInt("id"));
+                    BasicDB.setUserInfo(getApplicationContext(),object.getString("user_name"),object.getString("user_pw"),object.getInt("id"));
 
                     BasicDB.setAppoint(getApplicationContext(),-1);
 

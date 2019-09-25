@@ -39,6 +39,7 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
     EditText address_detail;//상세 주소 입력한 것
 
     NaverMap naverMap;
+    Marker marker;
     boolean map_Check=false;
 
     public Add_Appointment_Fragment_2() {
@@ -112,7 +113,9 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
         LatLng latLng = new LatLng(latitude,longitude);
         naverMap.setCameraPosition(new CameraPosition(latLng,15));
 
-        Marker marker = new Marker();
+        if(marker !=null)
+        marker.setMap(null);
+        marker = new Marker();
         marker.setCaptionText(address);
         marker.setSubCaptionText(detail);
         marker.setIconTintColor(getResources().getColor(R.color.mainColor1));

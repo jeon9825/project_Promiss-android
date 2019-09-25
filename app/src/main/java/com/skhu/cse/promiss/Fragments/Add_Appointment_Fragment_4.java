@@ -71,7 +71,7 @@ public class Add_Appointment_Fragment_4 extends Fragment  {
             public void onClick(View view) {
                 if(view.getId()==R.id.frg_appointment_4_add_2) //벌금 금액
                 {
-                    if(money_N==3000) //최대 금액
+                    if(money_N==10000) //최대 금액
                     {
                         Toast.makeText(getActivity(),"최소 금액입니다.",Toast.LENGTH_LONG).show();
                     }else
@@ -81,12 +81,12 @@ public class Add_Appointment_Fragment_4 extends Fragment  {
                     }
                 }else
                 {
-                    if(money_cycle_N==30)//최대 주기
+                    if(money_cycle_N==60)//최대 주기
                     {
                         Toast.makeText(getActivity(),"최대 주기입니다.",Toast.LENGTH_LONG).show();
                     }else
                     {
-                        money_cycle_N++;
+                        money_cycle_N+=5;
                         money_cycle.setText(""+money_cycle_N);
                     }
 
@@ -116,7 +116,7 @@ public class Add_Appointment_Fragment_4 extends Fragment  {
                         Toast.makeText(getActivity(),"최소 주기입니다.",Toast.LENGTH_LONG).show();
                     }else
                     {
-                        money_cycle_N--;
+                        money_cycle_N-=5;
                         money_cycle.setText(""+money_cycle_N);
                     }
 
@@ -129,6 +129,8 @@ public class Add_Appointment_Fragment_4 extends Fragment  {
         add_2.setOnClickListener(addMoney);
         minus_1.setOnClickListener(minusMoney);
         minus_2.setOnClickListener(minusMoney);
+
+
 
 
         view.findViewById(R.id.frg_appointment_4_btn).setOnClickListener(new View.OnClickListener() {

@@ -172,7 +172,7 @@ public class Add_Appointment_Fragment_5 extends Fragment {
                 {
                     JSONObject user = array.getJSONObject(i);
 
-                    String name = user.getString("user_id");
+                    String name = user.getString("user_name");
                     int id = user.getInt("id");
                     boolean invite =false;
                     if(ids.contains(id))

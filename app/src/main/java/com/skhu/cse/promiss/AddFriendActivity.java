@@ -53,7 +53,7 @@ public class AddFriendActivity extends AppCompatActivity {
         findViewById(R.id.frg_appointment_5_t1).setVisibility(View.GONE);
 
         Intent data = getIntent();
-        arrayList = data.getParcelableExtra("data");
+        arrayList = data.getParcelableArrayListExtra("data");
         recyclerView=findViewById(R.id.frg_appointment_5_recycler);
         adapter=new UserListAdapter(this,arrayList);
 
@@ -159,7 +159,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 {
                     JSONObject user = array.getJSONObject(i);
 
-                    String name = user.getString("user_id");
+                    String name = user.getString("user_name");
                     int id = user.getInt("id");
                     boolean invite =false;
                     if(ids.contains(id))

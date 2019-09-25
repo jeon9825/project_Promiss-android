@@ -157,9 +157,9 @@ public class LoginActivity extends AppCompatActivity {
                    object = object.getJSONObject("data");
 
                     UserData.shared.setId(object.getInt("id"));
-                    UserData.shared.setName(object.getString("user_id"));
+                    UserData.shared.setName(object.getString("user_name"));
 
-                    BasicDB.setUserInfo(getApplicationContext(),object.getString("user_id"),object.getString("user_pw"),object.getInt("id"));
+                    BasicDB.setUserInfo(getApplicationContext(),object.getString("user_name"),object.getString("user_pw"),object.getInt("id"));
 
                     BasicDB.setAppoint(getApplicationContext(),object.getInt("appointment_id"));
                     Intent intent = new Intent(LoginActivity.this, MapActivity.class);

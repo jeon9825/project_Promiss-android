@@ -1,6 +1,7 @@
 package com.skhu.cse.promiss;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -56,6 +57,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RelativeLayout acceptLayout;
     TextView time_textView;
 
+    final public int ADD_APPOINTMENT = 2002;
     boolean isAppointment = false;
 
     @Override
@@ -95,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(MapActivity.this, AddAppointmentActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,ADD_APPOINTMENT);
                 }
             }
         });
@@ -170,31 +172,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }.run();
     }
 
-    public void SetGameSetiing(){
+    public void SetGameSetiing(int id){
 
 
         PusherOptions options = new PusherOptions();
         options.setCluster("ap3");
         Pusher pusher = new Pusher("cb4bcb99bfc3727bdfb0", options);
 
-        Channel channel = pusher.subscribe("my-channel");
+        Channel channel = pusher.subscribe("ProMiss");
 
-        channel.bind("my-event", new SubscriptionEventListener() {
+        channel.bind("event_game"+id, new SubscriptionEventListener() {
             @Override
-            public void onEvent(PusherEvent event) {
+            public void onEvent(PusherEvent event)
+            {
                 String data= event.getData();
+                Log.d("data",data);
             }
 
-//            public void onEvent(String channelName, String eventName, final String data) {
-//                System.out.println(data);
-//            }
         });
-
-
-
         pusher.connect();
-
-
     }
 
     private Callback appoint=new Callback() {
@@ -234,7 +230,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     });
                     CalculateTime(date,time);
-
+                    SetGameSetiing(object.getInt("id"));
 
 
 
@@ -487,6 +483,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 requestCode, permissions, grantResults);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            GetAppointment();
+        }
+    }
+
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         map=naverMap;
@@ -499,6 +504,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         int hour;
         int minute;
         int second;
+        String minute_S;
+        String second_S;
+        String hour_S;
 
         public AppointTimer(){
             this.minute=0; this.second=0;
@@ -520,6 +528,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         this.cancel();
                     }else
                     {
+                        if(hour==2){
+                            this.cancel();
+                            MapActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    GetAppointment();
+                                }
+                            });
+                        }
+                        hour--;
                         minute=59;
                         second=60;
                     }
@@ -538,7 +556,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             MapActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    time_textView.setText(hour+":"+minute+":"+second);
+                    if(minute<10){
+                        minute_S = "0"+minute;
+                    }else
+                    {
+                        minute_S = minute+"";
+                    }
+                    if(second<10) {
+                        second_S = "0" + second;
+                    }else
+                    {
+                        second_S = ""+second;
+                    }
+
+                    if(hour<10)
+                    {
+                        hour_S = "0"+hour;
+                    }else{
+                        hour_S =""+hour;
+                    }
+                    time_textView.setText(hour_S+":"+minute_S+":"+second_S);
                 }
             });
 

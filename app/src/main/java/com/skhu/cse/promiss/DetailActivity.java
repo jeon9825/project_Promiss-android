@@ -125,7 +125,7 @@ public class DetailActivity extends AppCompatActivity {
                 for (int i = 0; i < members.length(); i++) {
 
                     JSONObject item = members.getJSONObject(i);
-                    arrayList.add(new UserItem(item.getInt("id"), item.getString("user_id"), true));
+                    arrayList.add(new UserItem(item.getInt("id"), item.getString("user_name"), true));
 
                 }
 
