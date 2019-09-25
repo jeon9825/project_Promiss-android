@@ -235,6 +235,8 @@ public class AddAppointmentActivity extends AppCompatActivity {
                         public void run() {
                             BasicDB.setAppoint(getApplicationContext(),appoint_id);
                             Toast.makeText(AddAppointmentActivity.this, "약속 생성에 성공하였습니다.", Toast.LENGTH_LONG).show();
+                            Intent intent = getIntent();
+                            setResult(RESULT_OK,intent);
                             finish();
                         }
                     });

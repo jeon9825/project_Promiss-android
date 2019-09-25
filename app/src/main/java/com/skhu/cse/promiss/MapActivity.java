@@ -5,6 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.overlay.CircleOverlay;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
@@ -13,6 +16,7 @@ import com.pusher.client.channel.SubscriptionEventListener;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -56,6 +60,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     NaverMap map;
     RelativeLayout acceptLayout;
     TextView time_textView;
+    CircleOverlay circle;
 
     final public int ADD_APPOINTMENT = 2002;
     boolean isAppointment = false;
@@ -187,10 +192,48 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             {
                 String data= event.getData();
                 Log.d("data",data);
+
+                try{
+                    JSONObject object = new JSONObject(data);
+
+                    JSONObject appoint = object.getJSONObject("appointment");
+
+                    double latitude = appoint.getDouble("latitude");
+                    double longitude = appoint.getDouble("longitude");
+                    double radius = appoint.getDouble("radius");
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SetCircle(latitude,longitude,radius); //원 생성
+                        }
+                    });
+
+
+
+                }catch (JSONException e)
+                {
+
+                }
+
+
             }
 
         });
         pusher.connect();
+    }
+
+    //약속 원 만들기
+    public void SetCircle(double latitude,double longitude,double radius)
+    {
+        if(circle !=null) circle.setMap(null);
+        circle = new CircleOverlay();
+        circle.setCenter(new LatLng(latitude, longitude));
+        circle.setOutlineColor(getResources().getColor(R.color.mainColor1));
+        circle.setColor(Color.argb(35,69,79,161));
+        circle.setOutlineWidth(3);
+        circle.setRadius(radius);
+        circle.setMap(map);
     }
 
     private Callback appoint=new Callback() {
@@ -220,12 +263,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     final String name = object.getString("name");
                     final String date = object.getString("date");
                     final String time = object.getString("date_time");
+                    final double latitude =  object.getDouble("latitude");
+                    final double longitude = object.getDouble("longitude");
+                    final double radius = object.getDouble("radius");
+
+
                     MapActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
                             ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
                             ((TextView)findViewById(R.id.map_appoint_address)).setText(name);
+                            SetCircle(latitude,longitude,radius); //원 생성
                         }
 
                     });
@@ -267,11 +316,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }catch (JSONException e)
             {
                 e.printStackTrace();
+
                 MapActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MapActivity.this, "네트워크 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Toast.makeText(MapActivity.this, "서버 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
+                       BasicDB.setAppoint(getApplicationContext(),-1);
+                      //  finish();
                     }
                 });
             }
@@ -495,6 +546,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         map=naverMap;
+        map.getUiSettings().setCompassEnabled(false);
         naverMap.setLocationSource(locationSource);
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
     }
