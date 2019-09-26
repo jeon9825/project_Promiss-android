@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.overlay.CircleOverlay;
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.OverlayImage;
+import com.naver.maps.map.util.MarkerIcons;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
@@ -36,6 +39,7 @@ import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.server.GetJson;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,6 +47,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Map;
@@ -60,7 +65,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     NaverMap map;
     RelativeLayout acceptLayout;
     TextView time_textView;
-    CircleOverlay circle;
+    CircleOverlay circle; //원 자기장
+    ArrayList<Marker> markerArrayList=new ArrayList<>();
+    Marker appointMarker;
 
     final public int ADD_APPOINTMENT = 2002;
     boolean isAppointment = false;
@@ -198,6 +205,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     JSONObject appoint = object.getJSONObject("appointment");
 
+                    String name = appoint.getString("name");
                     double latitude = appoint.getDouble("latitude");
                     double longitude = appoint.getDouble("longitude");
                     double radius = appoint.getDouble("radius");
@@ -205,10 +213,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     MapActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if(appointMarker==null)
+                            SetAppointmentMarker(latitude,longitude,name);
                             SetCircle(latitude,longitude,radius); //원 생성
                         }
                     });
 
+                    JSONArray members = object.getJSONArray("members");
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(markerArrayList.size()>0)CleanMemberMarkers();
+                        }
+                    });
+
+                    for(int i=0;i<members.length();i++)
+                    {
+                        JSONObject member = members.getJSONObject(i);
+
+                        String user_name = member.getString("user_name");
+                        double user_latitude = member.getDouble("latitude");
+                        double user_longitude = member.getDouble("longitude");
+
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SetMemberMarker(user_latitude,user_longitude,user_name);
+                            }
+                        });
+
+                    }
 
 
                 }catch (JSONException e)
@@ -221,6 +256,63 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         });
         pusher.connect();
+    }
+
+    public void SetMemberMarker(double latitude,double longitude,String name)
+    {
+        Marker marker = new Marker();
+        marker.setPosition(new LatLng(latitude,longitude));
+        marker.setCaptionTextSize(15);
+        marker.setIcon(MarkerIcons.BLACK);
+        marker.setIconTintColor(GetColor(markerArrayList.size()));
+        marker.setCaptionText(name);
+        marker.setHideCollidedSymbols(true);
+        marker.setMap(map);
+
+        markerArrayList.add(marker);
+    }
+
+    public int GetColor(int index)
+    {
+        index %= 6;
+        switch (index)
+        {
+            case 0:
+                return Color.RED;
+            case 1:
+                return getResources().getColor(R.color.mainColor1); //blue
+            case 2:
+                return Color.CYAN;
+
+            case 3:
+                return Color.YELLOW;
+            case 4:
+                return Color.MAGENTA;
+            case 5:
+                return Color.LTGRAY;
+                default:
+                    return Color.GREEN;
+        }
+    }
+
+    public void CleanMemberMarkers()
+    {
+       for(int i=0;i< markerArrayList.size();i++)
+       {
+           markerArrayList.get(i).setMap(null);
+       }
+    }
+
+    public void SetAppointmentMarker(double latitude,double longitude,String name)
+    {
+        appointMarker = new Marker();
+        appointMarker.setPosition(new LatLng(latitude, longitude));
+        appointMarker.setIcon(OverlayImage.fromResource(R.drawable.flag_icon));
+        appointMarker.setCaptionText(name);
+        appointMarker.setHideCollidedSymbols(true);
+        appointMarker.setCaptionTextSize(16);
+        appointMarker.setMap(map);
+
     }
 
     //약속 원 만들기

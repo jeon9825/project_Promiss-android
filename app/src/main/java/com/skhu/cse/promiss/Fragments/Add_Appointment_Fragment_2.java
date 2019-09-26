@@ -25,6 +25,7 @@ import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.util.MarkerIcons;
 import com.skhu.cse.promiss.AddAppointmentActivity;
 import com.skhu.cse.promiss.LocationSettingAcvtivity;
 import com.skhu.cse.promiss.R;
@@ -118,6 +119,7 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
         marker = new Marker();
         marker.setCaptionText(address);
         marker.setSubCaptionText(detail);
+        marker.setIcon(MarkerIcons.BLACK);
         marker.setIconTintColor(getResources().getColor(R.color.mainColor1));
         marker.setPosition(latLng);
         marker.setMap(naverMap);
