@@ -5,12 +5,15 @@
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="oval">
             <solid android:color="@color/mainColor2"/>
+            <stroke android:width="3dp" android:color="#ffffff" >
+
+            </stroke>
             <size
                 android:width="48dp"
                 android:height="48dp"
                 />
         </shape>
     </item>
-    <item android:drawable="@drawable/flag" android:gravity="center" android:width="30dp"
-        android:height="30dp"/>
+    <item android:drawable="@drawable/flag" android:gravity="center" android:width="24dp"
+        android:height="24dp"/>
 </layer-list>

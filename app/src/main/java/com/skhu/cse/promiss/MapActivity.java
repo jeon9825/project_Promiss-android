@@ -5,8 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
@@ -19,6 +23,7 @@ import com.pusher.client.channel.SubscriptionEventListener;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +40,7 @@ import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.skhu.cse.promiss.Items.AppointmentData;
 import com.skhu.cse.promiss.Items.UserData;
+import com.skhu.cse.promiss.Items.UserItem;
 import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.server.GetJson;
 
@@ -68,6 +74,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     CircleOverlay circle; //원 자기장
     ArrayList<Marker> markerArrayList=new ArrayList<>();
     Marker appointMarker;
+
+    RecyclerView recyclerView;
+    ArrayList<UserItem> arrayList;
+    MemberAdapter adapter;
 
     final public int ADD_APPOINTMENT = 2002;
     boolean isAppointment = false;
@@ -186,6 +196,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void SetGameSetiing(int id){
 
+        findViewById(R.id.map_add_btn).setVisibility(View.GONE);
+
+
+        recyclerView = findViewById(R.id.map_member_list);
+        recyclerView.setVisibility(View.VISIBLE);
+
+        arrayList=new ArrayList<>();
+        arrayList.add(new UserItem(-1,"목적지",false));
+        adapter=new MemberAdapter(this,arrayList);
+        adapter.setClickEvent(new MemberAdapter.ClickEvent() {
+            @Override
+            public void OnClick(View view, int position) {
+                Marker marker;
+                if(position==0){
+                    marker = appointMarker;
+                }else {
+                     marker= markerArrayList.get(position);
+                }
+                double latitude = marker.getPosition().latitude;
+                double longitude = marker.getPosition().longitude;
+                CameraUpdate cameraUpdate= CameraUpdate.scrollTo(new LatLng(latitude,longitude))
+                        .animate(CameraAnimation.Easing);
+                map.moveCamera(cameraUpdate);
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
+
 
         PusherOptions options = new PusherOptions();
         options.setCluster("ap3");
@@ -200,6 +241,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 String data= event.getData();
                 Log.d("data",data);
 
+                boolean isInit = false;
+                if(arrayList.size()>1) isInit = true;
                 try{
                     JSONObject object = new JSONObject(data);
 
@@ -232,18 +275,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     {
                         JSONObject member = members.getJSONObject(i);
 
+                        int user_id = member.getInt("user_id");
                         String user_name = member.getString("user_name");
                         double user_latitude = member.getDouble("latitude");
                         double user_longitude = member.getDouble("longitude");
+
+                        if(isInit)arrayList.add(new UserItem(user_id,user_name,false));
 
                         MapActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 SetMemberMarker(user_latitude,user_longitude,user_name);
+
                             }
                         });
 
                     }
+
+                    if(isInit){
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                    isInit = false;
 
 
                 }catch (JSONException e)
@@ -670,6 +727,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     if(hour==0)
                     {
                         this.cancel();
+                       // BasicDB.setAppoint(getApplicationContext(),-1);
                     }else
                     {
                         if(hour==2){
