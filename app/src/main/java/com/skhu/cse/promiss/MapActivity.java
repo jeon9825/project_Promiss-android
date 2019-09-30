@@ -806,6 +806,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     if(hour==0)
                     {
                         this.cancel();
+                        Intent Service = new Intent(MapActivity.this,PromissService.class);
+                        stopService(Service);
                        // BasicDB.setAppoint(getApplicationContext(),-1);
                     }else
                     {
