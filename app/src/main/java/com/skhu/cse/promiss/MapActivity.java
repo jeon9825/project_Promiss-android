@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,7 @@ import com.naver.maps.map.util.FusedLocationSource;
 import com.skhu.cse.promiss.Items.AppointmentData;
 import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.Items.UserItem;
+import com.skhu.cse.promiss.Service.PromissService;
 import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.server.GetJson;
 
@@ -78,6 +80,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RecyclerView recyclerView;
     ArrayList<UserItem> arrayList;
     MemberAdapter adapter;
+    boolean isOnce = false;
 
     final public int ADD_APPOINTMENT = 2002;
     boolean isAppointment = false;
@@ -196,12 +199,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void SetGameSetiing(int id){
 
-        findViewById(R.id.map_add_btn).setVisibility(View.GONE);
+
 
 
         recyclerView = findViewById(R.id.map_member_list);
-        recyclerView.setVisibility(View.VISIBLE);
+        MapActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.map_add_btn).setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MapActivity.this);
+                linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                recyclerView.setLayoutManager(linearLayoutManager);
+            }
+        });
 
+        if(arrayList==null)
         arrayList=new ArrayList<>();
         arrayList.add(new UserItem(-1,"목적지",false));
         adapter=new MemberAdapter(this,arrayList);
@@ -216,15 +229,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
                 double latitude = marker.getPosition().latitude;
                 double longitude = marker.getPosition().longitude;
-                CameraUpdate cameraUpdate= CameraUpdate.scrollTo(new LatLng(latitude,longitude))
-                        .animate(CameraAnimation.Easing);
-                map.moveCamera(cameraUpdate);
+
+                if(latitude==0&&longitude==0){
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                           Toast.makeText(MapActivity.this,"친구들 위치가 확인이 안됩니다",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                }else {
+                    CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(latitude, longitude))
+                            .animate(CameraAnimation.Easing);
+                    map.moveCamera(cameraUpdate);
+                }
             }
         });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+
+
+        MapActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                recyclerView.setAdapter(adapter);
+            }
+        });
+
 
 
 
@@ -242,7 +274,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Log.d("data",data);
 
                 boolean isInit = false;
-                if(arrayList.size()>1) isInit = true;
+                if(arrayList.size()==1) isInit = true;
                 try{
                     JSONObject object = new JSONObject(data);
 
@@ -324,6 +356,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         marker.setIconTintColor(GetColor(markerArrayList.size()));
         marker.setCaptionText(name);
         marker.setHideCollidedSymbols(true);
+
+        if(latitude!=0&&longitude!=0)
         marker.setMap(map);
 
         markerArrayList.add(marker);
@@ -370,9 +404,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         appointMarker.setCaptionTextSize(16);
         appointMarker.setMap(map);
 
+        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(latitude, longitude))
+                .animate(CameraAnimation.Easing);
+        map.moveCamera(cameraUpdate);
+
     }
 
-    //약속 원 만들기
+    //약속 원 만들기  Clear
     public void SetCircle(double latitude,double longitude,double radius)
     {
         if(circle !=null) circle.setMap(null);
@@ -400,13 +438,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
             String result = response.body().string();
-            Log.d("server",result);
+            Log.d("Appointserver",result);
 
             try{
                 JSONObject object = new JSONObject(result);
 
                 if(object.getInt("result")==2000) //약속 실행 중
                 {
+                    arrayList =new ArrayList<>();
                     object = object.getJSONObject("data");
 
                     final String name = object.getString("name");
@@ -423,13 +462,51 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
                             ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
                             ((TextView)findViewById(R.id.map_appoint_address)).setText(name);
+                            if(appointMarker==null)
+                                SetAppointmentMarker(latitude,longitude,name);
                             SetCircle(latitude,longitude,radius); //원 생성
                         }
 
                     });
+
+                    JSONArray members = object.getJSONArray("members");
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(markerArrayList.size()>0)CleanMemberMarkers();
+                        }
+                    });
+
+                    for(int i=0;i<members.length();i++) //홈화면으로 들어올시 게임 시작이면 멤버 바로 받아온다.
+                    {
+                        JSONObject member = members.getJSONObject(i);
+
+                        int user_id = member.getInt("user_id");
+                        String user_name = member.getString("user_name");
+                        double user_latitude = member.getDouble("latitude");
+                        double user_longitude = member.getDouble("longitude");
+
+                        arrayList.add(new UserItem(user_id,user_name,false));
+
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SetMemberMarker(user_latitude,user_longitude,user_name);
+                            }
+                        });
+
+                    }
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent Service = new Intent(MapActivity.this, PromissService.class);
+                            ContextCompat.startForegroundService(MapActivity.this, Service);
+                        }
+                    });
                     CalculateTime(date,time);
                     SetGameSetiing(object.getInt("id"));
-
 
 
 
@@ -576,7 +653,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             String result = response.body().string();
 
-            Log.d("server",result);
+            Log.d("Checkserver",result);
             try{
 
                 JSONObject object = new JSONObject(result);
@@ -618,7 +695,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             String result = response.body().string();
-            Log.d("server",result);
+            Log.d("Acceptserver",result);
 
             try{
                 MapActivity.this.runOnUiThread(new Runnable() {
@@ -730,7 +807,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                        // BasicDB.setAppoint(getApplicationContext(),-1);
                     }else
                     {
-                        if(hour==2){
+                        if(hour==2&&!isOnce){
+                            isOnce=true;
                             this.cancel();
                             MapActivity.this.runOnUiThread(new Runnable() {
                                 @Override

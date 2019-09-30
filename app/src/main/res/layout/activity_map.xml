@@ -49,12 +49,12 @@
             android:layout_width="match_parent"
             android:layout_below="@id/map_bottom_appointment_title_view"
             android:id="@+id/map_botoom_appointment_detail"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="약속 만들기"
                 android:id="@+id/map_add_btn"
                 android:background="@color/mainColor3"
@@ -64,7 +64,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/map_member_list">
 

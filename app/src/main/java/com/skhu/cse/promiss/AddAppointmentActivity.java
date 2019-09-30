@@ -196,12 +196,12 @@ public class AddAppointmentActivity extends AppCompatActivity {
                         body_arrayList.add(integers.get(i).toString());
                     }
 
-                    Log.d("body",Arrays.toString(body_arrayList.toArray(new String[]{})));
+               //     Log.d("body",Arrays.toString(body_arrayList.toArray(new String[]{})));
                     json.requestPost("api/Appointment/newAppointment",callback,body_arrayList.toArray(new String[]{}));
 
                 }
             }.run();
-            finish();
+
         }
     }
 

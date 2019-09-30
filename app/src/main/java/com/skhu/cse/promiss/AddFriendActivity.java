@@ -17,7 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.Items.UserItem;
+import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.server.GetJson;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import me.gujun.android.taggroup.TagGroup;
 import okhttp3.Call;
@@ -136,14 +139,80 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                new Thread() {
+                    @Override
+                    public void run() {
+
+
+                        String[] body = new String[]{
+                                "id", BasicDB.getAppoint(getApplicationContext())+"",
+                                "num",""+ids.size()
+                        };
+                        ArrayList<String> body_arrayList = new ArrayList<>();
+
+                        body_arrayList.addAll(Arrays.asList(body));
+
+
+
+                        for(int i=0;i<ids.size();i++)
+                        {
+                            body_arrayList.add("member_id"+i);
+                            body_arrayList.add(ids.get(i).toString());
+                        }
+
+                        GetJson json = GetJson.getInstance();
+
+                        json.requestPost("api/Appointment/newMember", newMember, body_arrayList.toArray(new String[]{}));
+                    }
+                }.run();
+
             }
         });
     }
 
+    private Callback newMember = new Callback() {
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            AddFriendActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),"현재 네트워크 문제로 이용할수 없습니다.",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        }
+
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            String result = response.body().string();
+
+            try {
+                JSONObject object = new JSONObject(result);
+
+                AddFriendActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"해당 멤버에게 초대를 보냈습니다",Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+
+            }catch (JSONException  e)
+            {
+                AddFriendActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"현재 서버 문제로 이용할수 없습니다.",Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+            }
+        }
+    };
 
 
 
-    Callback callback = new Callback(){
+    private Callback callback = new Callback(){
 
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -194,7 +263,7 @@ public class AddFriendActivity extends AppCompatActivity {
             AddFriendActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(),"현재 서버 문제로 이용할수 없습니다.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"현재 네트워크 문제로 이용할수 없습니다.",Toast.LENGTH_LONG).show();
                     AddFriendActivity.this.finish();
                 }
             });

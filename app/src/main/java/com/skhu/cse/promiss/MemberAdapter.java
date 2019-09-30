@@ -59,11 +59,15 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberListViewholder> {
 
         UserItem item = arrayList.get(position);
 
-        String name = item.getName().substring(0,9);
+        String name= item.getName();
+        if(name.length()>10)
+        name = name.substring(0,9);
 
         holder.button.setBackgroundResource(GetBackground(position));
         if(position!=0)
         holder.button.setText(name);
+        else
+            holder.button.setText("");
 
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
