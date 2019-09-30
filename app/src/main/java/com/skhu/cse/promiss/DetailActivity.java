@@ -79,7 +79,13 @@ public class DetailActivity extends AppCompatActivity {
                 builder = new PromissDialog.Builder(DetailActivity.this)
                         .setTitle("약속 나가기")
                         .setMessage("현재 약속을 다시 참여하고 싶으면,\n현재 약속 멤버가 다시 초대를 해주어야 합니다\n정말로 나가시겠습니까?")
-                        .addCancelListener("나가기", new View.OnClickListener() {
+                        .addCancelListener("취소", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                builder.dismiss();
+
+                            }
+                        }).addOkayListener("나가기", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 builder.dismiss();
@@ -93,11 +99,6 @@ public class DetailActivity extends AppCompatActivity {
                                         json.requestPost("api/Appointment/leave", leave, "appoint_id", "" + appoint_id,"id",""+id);
                                     }
                                 }.run();
-                            }
-                        }).addOkayListener("취소", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                builder.dismiss();
                             }
                         }).build();
                 builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경 뒤에 안보이기

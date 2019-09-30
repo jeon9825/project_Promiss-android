@@ -216,7 +216,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         if(arrayList==null)
         arrayList=new ArrayList<>();
-        arrayList.add(new UserItem(-1,"목적지",false));
+        arrayList.add(0,new UserItem(-1,"목적지",false));
         adapter=new MemberAdapter(this,arrayList);
         adapter.setClickEvent(new MemberAdapter.ClickEvent() {
             @Override
@@ -225,7 +225,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(position==0){
                     marker = appointMarker;
                 }else {
-                     marker= markerArrayList.get(position);
+                     marker= markerArrayList.get(position-1);
                 }
                 double latitude = marker.getPosition().latitude;
                 double longitude = marker.getPosition().longitude;
@@ -353,11 +353,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         marker.setPosition(new LatLng(latitude,longitude));
         marker.setCaptionTextSize(15);
         marker.setIcon(MarkerIcons.BLACK);
-        marker.setIconTintColor(GetColor(markerArrayList.size()));
+        marker.setIconTintColor(GetColor(markerArrayList.size()-1));
         marker.setCaptionText(name);
         marker.setHideCollidedSymbols(true);
 
-        if(latitude!=0&&longitude!=0)
+        if(latitude!=0&&longitude!=0&&!name.equals(UserData.shared.getName()))
         marker.setMap(map);
 
         markerArrayList.add(marker);
@@ -392,6 +392,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
        {
            markerArrayList.get(i).setMap(null);
        }
+       markerArrayList.clear();
     }
 
     public void SetAppointmentMarker(double latitude,double longitude,String name)
@@ -501,6 +502,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     MapActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             Intent Service = new Intent(MapActivity.this, PromissService.class);
                             ContextCompat.startForegroundService(MapActivity.this, Service);
                         }

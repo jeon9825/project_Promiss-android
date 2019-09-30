@@ -162,6 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                     BasicDB.setUserInfo(getApplicationContext(),object.getString("user_name"),object.getString("user_pw"),object.getInt("id"));
 
                     BasicDB.setAppoint(getApplicationContext(),object.getInt("appointment_id"));
+                    Log.d("test",BasicDB.getAppoint(getApplicationContext())+"");
                     Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                     startActivity(intent);
                     finish();

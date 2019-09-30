@@ -71,6 +71,7 @@ public class PromissService extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
+        Log.d("test","실행");
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return START_NOT_STICKY;

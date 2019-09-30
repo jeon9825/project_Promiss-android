@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddFriendActivity"></activity>
+        <activity android:name=".AddFriendActivity">
+
+        </activity>
         <activity android:name=".DetailActivity" />
         <activity android:name=".LocationSettingAcvtivity" />
         <activity
@@ -24,6 +26,8 @@
         <activity android:name=".DeleteActivity" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".RegisterActivity" />
+        <service android:name=".Service.PromissService" />
+
         <activity android:name=".MapActivity" />
         <activity
             android:name=".LoginActivity"
