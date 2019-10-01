@@ -81,12 +81,12 @@ public class Add_Appointment_Fragment_4 extends Fragment  {
                     }
                 }else
                 {
-                    if(money_cycle_N==60)//최대 주기
+                    if(money_cycle_N==15)//최대 주기
                     {
                         Toast.makeText(getActivity(),"최대 주기입니다.",Toast.LENGTH_LONG).show();
                     }else
                     {
-                        money_cycle_N+=5;
+                        money_cycle_N+=1;
                         money_cycle.setText(""+money_cycle_N);
                     }
 
@@ -116,7 +116,7 @@ public class Add_Appointment_Fragment_4 extends Fragment  {
                         Toast.makeText(getActivity(),"최소 주기입니다.",Toast.LENGTH_LONG).show();
                     }else
                     {
-                        money_cycle_N-=5;
+                        money_cycle_N-=1;
                         money_cycle.setText(""+money_cycle_N);
                     }
 

@@ -60,9 +60,20 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         date=view.findViewById(R.id.frg_appointment_3_t5);
         time=view.findViewById(R.id.frg_appointment_3_t6);
         date_S = ""+year+"-"+month+"-"+day;
-        date.setText(date_S);
-        hourOfDay= hour+":"+minute;
-        time.setText(hourOfDay);
+        date.setText(year+"."+month+"."+day);
+        String time_S ;
+
+        hourOfDay=hour+":"+minute;
+        if(hour>12)
+            time_S="오후 "+(hour-12);
+        else if(hour==12)
+            time_S="오후 "+hour;
+        else
+            time_S="오전 "+hour;
+
+        time_S+=":"+minute;
+
+        time.setText(time_S);
 
         main=this;
 
