@@ -197,6 +197,7 @@ public class DetailActivity extends AppCompatActivity {
                 object = object.getJSONObject("data");
                 String name = object.getString("name");
                 String address1 = object.getString("address");
+                String address2 = object.getString("detail");
                 String date = object.getString("date");
                 String time = object.getString("date_time");
                 String[] arr = time.split(":");
@@ -219,6 +220,7 @@ public class DetailActivity extends AppCompatActivity {
                     public void run() {
                         textViewName.setText(name);
                         textViewAddress1.setText(address1);
+                        textViewAddress2.setText(address2);
                         textViewDate.setText(date);
                         textViewTime.setText(timeText);
                         textViewFine.setText(fine);

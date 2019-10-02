@@ -142,14 +142,15 @@ public class PromissService extends Service implements LocationListener {
         public void onLocationChanged ( final Location location){
             Log.d("gps", "LocationChanged");
             this.location = location;
-//        sendGPSMessage(location.getLatitude(),location.getLongitude());
+//
 
             new Thread() {
                 @Override
                 public void run() {
                     GetJson connection = GetJson.getInstance();
 
-                    connection.requestPost("api/User/gpsUpdate", callback, "id",id,"latitude",location.getLatitude()+"","longitude",location.getLongitude()+"");
+                    connection.requestPost("api/User/gpsUpdate", callback, "id",id,
+                            "latitude",location.getLatitude()+"","longitude",location.getLongitude()+"");
                 }
             }.run();
 

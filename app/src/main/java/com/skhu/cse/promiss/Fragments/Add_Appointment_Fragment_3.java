@@ -30,6 +30,8 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
     TextView time;
     Fragment main;
     Calendar now;
+    int appoint_hour;
+    int appoint_minute;
     String hourOfDay;
     String date_S;
     public Add_Appointment_Fragment_3() {
@@ -61,7 +63,16 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         time=view.findViewById(R.id.frg_appointment_3_t6);
         date_S = ""+year+"-"+month+"-"+day;
         date.setText(date_S);
-        hourOfDay= hour+":"+minute;
+        if(hour<=21&&hour>0||hour==21&&minute==0)
+        appoint_hour = hour+3;
+        else if(hour >21)
+        {
+            day++;
+            date_S = ""+year+"-"+month+"-"+day;
+            date.setText(date_S);
+        }
+        appoint_minute = minute;
+        hourOfDay= appoint_hour+":"+minute;
         time.setText(hourOfDay);
 
         main=this;
@@ -119,6 +130,7 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         String time_S ;
+
 
         this.hourOfDay=hourOfDay+":"+minute;
         if(hourOfDay>12)

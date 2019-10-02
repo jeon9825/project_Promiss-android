@@ -12,6 +12,7 @@ public class BasicDB {
         static final String PREF_USER_PW = "password";
         static final String PREF_ID="id";
         static final String PREF_Appoint="appoint";
+        static final String PREF_Result="result";
 
         public static SharedPreferences getSharedPreferences(Context ctx) {
             return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -30,6 +31,18 @@ public class BasicDB {
         return getSharedPreferences(ctx).getInt(PREF_Appoint, -1);
         }
 
+        public static int getResult(Context ctx)
+        {
+            return getSharedPreferences(ctx).getInt(PREF_Result,-1);
+        }
+
+        public static boolean setPREF_Result(Context ctx,int result)
+        {
+            SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+            editor.putInt(PREF_Result, result);
+            editor.commit();
+            return true;
+        }
         public static boolean setAppoint(Context ctx,int Appoint)
         {
             SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();

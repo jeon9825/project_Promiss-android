@@ -72,30 +72,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationSource locationSource;
     NaverMap map;
     RelativeLayout acceptLayout;
+    RelativeLayout resultLayout;
     TextView time_textView;
     CircleOverlay circle; //원 자기장
     ArrayList<Marker> markerArrayList=new ArrayList<>();
     Marker appointMarker;
-
+    Pusher pusher;
+    RelativeLayout Fine_layout;
     RecyclerView recyclerView;
     ArrayList<UserItem> arrayList;
     MemberAdapter adapter;
     boolean isOnce = false;
 
+    TextView Fine_current;
+    Timer fine_timer;
+    TextView Fine_time;
     final public int ADD_APPOINTMENT = 2002;
     boolean isAppointment = false;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(pusher!=null)pusher.disconnect();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        resultLayout = findViewById(R.id.map_result_layout);
         time_textView = findViewById(R.id.map_appoint_time);
         acceptLayout = findViewById(R.id.map_invite_layout);
-        if(BasicDB.getAppoint(getApplicationContext())==-1)
-        CheckAppointment();
-        else
-        GetAppointment();
+        Fine_layout = findViewById(R.id.map_Fine_layout);
 
         FragmentManager fm = getSupportFragmentManager();
         MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map);
@@ -141,8 +151,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                if(i==0){
                                    BasicDB.setId(getApplicationContext(),-1);
                                    BasicDB.setAppoint(getApplicationContext(),-1);
+                                   Intent service = new Intent(MapActivity.this,PromissService.class);
+                                   stopService(service);
                                    Intent intent = new Intent(MapActivity.this, LoginActivity.class);
                                    startActivity(intent);
+                                   if(pusher!=null)
+                                   pusher.disconnect();
                                    finish();
                                }
                                 else if(i==2) {
@@ -157,23 +171,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    public void showFineLayout(){
+        Fine_layout.setVisibility(View.VISIBLE);
+
+        Fine_current = Fine_layout.findViewById(R.id.map_current_Fine);
+        Fine_time = Fine_layout.findViewById(R.id.map_Fine_time);
+    }
+
+    public void hideFineLayout(){
+        Fine_layout.setVisibility(View.GONE);
+    }
+
     public void CalculateTime(String date,String time) //시간 계산
     {
         Calendar temp = Calendar.getInstance();
-
-
-
         String[] date_S= date.split("-");
-
-
         String[] time_S = time.split(":");
 
 
-            GregorianCalendar now = new GregorianCalendar(temp.get(Calendar.YEAR),temp.get(Calendar.MONTH)+1,temp.get(Calendar.DAY_OF_MONTH),temp.get(Calendar.HOUR_OF_DAY),temp.get(Calendar.MINUTE));
+        GregorianCalendar now = new GregorianCalendar(temp.get(Calendar.YEAR),
+                temp.get(Calendar.MONTH)+1,temp.get(Calendar.DAY_OF_MONTH),
+                temp.get(Calendar.HOUR_OF_DAY),temp.get(Calendar.MINUTE));
 
-            GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_S[0]),Integer.parseInt(date_S[1]),Integer.parseInt(date_S[2]),Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
+        GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_S[0]),
+                Integer.parseInt(date_S[1]),Integer.parseInt(date_S[2]),
+                Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
 
-            long diff=appoint.getTimeInMillis()-now.getTimeInMillis();
+        long diff=appoint.getTimeInMillis()-now.getTimeInMillis();
         long sec = diff / 1000;
         long min = diff / (60 * 1000);
         long hour = diff / (60 * 60 * 1000);
@@ -202,10 +226,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
+
         recyclerView = findViewById(R.id.map_member_list);
         MapActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                showFineLayout();
                 findViewById(R.id.map_add_btn).setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MapActivity.this);
@@ -262,7 +288,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         PusherOptions options = new PusherOptions();
         options.setCluster("ap3");
-        Pusher pusher = new Pusher("cb4bcb99bfc3727bdfb0", options);
+        pusher = new Pusher("cb4bcb99bfc3727bdfb0", options);
 
         Channel channel = pusher.subscribe("ProMiss");
 
@@ -284,7 +310,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     double latitude = appoint.getDouble("latitude");
                     double longitude = appoint.getDouble("longitude");
                     double radius = appoint.getDouble("radius");
+                    int fine_time= appoint.getInt("Fine_current");
 
+
+                    if(fine_time!=0) {
+                        fine_timer.cancel();
+                        fine_timer = new Timer();
+                        fine_timer.schedule(new FineTimer(fine_time, 0), 0, 1000);
+
+                    }
                     MapActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -311,6 +345,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         String user_name = member.getString("user_name");
                         double user_latitude = member.getDouble("latitude");
                         double user_longitude = member.getDouble("longitude");
+
+                        if(user_id==UserData.shared.getId()) //벌금 가져오기
+                        {
+                            int FIne = member.getInt("Fine_current");
+                            MapActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Fine_current.setText(FIne+"");
+                                }
+                            });
+                        }
 
                         if(isInit)arrayList.add(new UserItem(user_id,user_name,false));
 
@@ -340,11 +385,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 }
 
-
             }
 
         });
         pusher.connect();
+    }
+
+    public void showResultLayout()
+    {
+        resultLayout.setVisibility(View.VISIBLE);
+
+
+        resultLayout.findViewById(R.id.map_result_go).getRootView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //결과보기 화면으로 넘어간다.
+            }
+        });
     }
 
     public void SetMemberMarker(double latitude,double longitude,String name)
@@ -407,6 +465,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(latitude, longitude))
                 .animate(CameraAnimation.Easing);
+        if(map!=null)
         map.moveCamera(cameraUpdate);
 
     }
@@ -422,6 +481,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         circle.setOutlineWidth(3);
         circle.setRadius(radius);
         circle.setMap(map);
+    }
+
+    public void GameEnd(){
+        findViewById(R.id.map_appoint_time).setVisibility(View.GONE); //
+        ((TextView) findViewById(R.id.map_add_btn)).setText("약속 만들기");
+        ((TextView) findViewById(R.id.map_appoint_address)).setText("현재 약속이 없습니다.");
     }
 
     private Callback appoint=new Callback() {
@@ -507,6 +572,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             ContextCompat.startForegroundService(MapActivity.this, Service);
                         }
                     });
+
+
                     CalculateTime(date,time);
                     SetGameSetiing(object.getInt("id"));
 
@@ -535,7 +602,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         CalculateTime(date, time);
                     }else //약속 끝남
                     {
+                        BasicDB.setPREF_Result(getApplicationContext(),BasicDB.getAppoint(getApplicationContext()));
                         BasicDB.setAppoint(getApplicationContext(),-1);
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showResultLayout();
+                            }
+                        });
                     }
                 }
 
@@ -777,6 +851,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         map.getUiSettings().setCompassEnabled(false);
         naverMap.setLocationSource(locationSource);
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+        if(BasicDB.getAppoint(getApplicationContext())==-1)
+            CheckAppointment();
+        else
+            GetAppointment();
+
+        if(BasicDB.getResult(getApplicationContext())!=-1)
+        {
+            showResultLayout();
+        }
     }
 
     class AppointTimer extends TimerTask {
@@ -808,6 +891,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         this.cancel();
                         Intent Service = new Intent(MapActivity.this,PromissService.class);
                         stopService(Service);
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BasicDB.setAppoint(getApplicationContext(),BasicDB.getAppoint(getApplicationContext()));
+                                BasicDB.setAppoint(getApplicationContext(),-1);
+                                CheckAppointment();
+                                GameEnd();
+                                hideFineLayout();
+                                showResultLayout();
+                            }
+                        });
+
                        // BasicDB.setAppoint(getApplicationContext(),-1);
                     }else
                     {
@@ -831,8 +926,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     minute--;
                     second=60;
                 }
-
-
             }else
             {
                 second--;
@@ -860,6 +953,73 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         hour_S =""+hour;
                     }
                     time_textView.setText(hour_S+":"+minute_S+":"+second_S);
+                }
+            });
+
+        }
+    }
+
+    class FineTimer extends TimerTask {
+
+
+        int minute;
+        int second;
+        String minute_S;
+        String second_S;
+
+        public FineTimer(){
+            this.minute=0; this.second=0;
+        }
+        public FineTimer(int minute,int second)
+        {
+            this.minute=minute; this.second =second;
+        }
+        @Override
+        public void run() {
+
+            if(second==0) {
+
+                if(minute==0)
+                {
+                    this.cancel();
+
+                }else
+                {
+                    minute--;
+                    second=60;
+                }
+            }else
+            {
+                second--;
+            }
+            MapActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(minute<10){
+                        minute_S = "0"+minute;
+                    }else
+                    {
+                        minute_S = minute+"";
+                    }
+                    if(second<10) {
+                        second_S = "0" + second;
+                    }else
+                    {
+                        second_S = ""+second;
+                    }
+
+                    String timer_S ;
+
+                    if(minute>0)
+                    {
+                        timer_S = second_S;
+                    }else
+                    {
+                        timer_S= minute_S;
+                    }
+
+
+                   Fine_time.setText(timer_S);
                 }
             });
 
