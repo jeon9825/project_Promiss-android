@@ -62,6 +62,7 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         date=view.findViewById(R.id.frg_appointment_3_t5);
         time=view.findViewById(R.id.frg_appointment_3_t6);
         date_S = ""+year+"-"+month+"-"+day;
+
         date.setText(date_S);
         if(hour<=21&&hour>0||hour==21&&minute==0)
         appoint_hour = hour+3;
@@ -74,6 +75,7 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         appoint_minute = minute;
         hourOfDay= appoint_hour+":"+minute;
         time.setText(hourOfDay);
+
 
         main=this;
 
