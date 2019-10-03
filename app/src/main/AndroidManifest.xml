@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.skhu.cse.promiss">
 
-
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -15,9 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddFriendActivity">
-
-        </activity>
+        <activity android:name=".ResultActivity"></activity>
+        <activity android:name=".AddFriendActivity"></activity>
         <activity android:name=".DetailActivity" />
         <activity android:name=".LocationSettingAcvtivity" />
         <activity
@@ -26,9 +23,9 @@
         <activity android:name=".DeleteActivity" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".RegisterActivity" />
-        <service android:name=".Service.PromissService" />
 
         <activity android:name=".MapActivity" />
+
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="adjustResize">
@@ -39,13 +36,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="ke4acfug28" />
+
+        <service android:name=".Service.PromissService" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

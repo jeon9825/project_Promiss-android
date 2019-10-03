@@ -91,7 +91,12 @@ public class Add_Appointment_Fragment_5 extends Fragment {
         tagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
             @Override
             public void onTagClick(String tag) {
+
+                int position = names.indexOf(tag);
+                arrayList.get(position).setInvite(false);
+                adapter.notifyDataSetChanged();
                 names.remove(tag);
+                tagGroup.setTags(names);
             }
         });
        tagGroup.setTags(names);

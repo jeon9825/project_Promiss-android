@@ -11,6 +11,15 @@ public class UserItem implements Parcelable {
     int id; //기본키
     String name; // 이름
     boolean invite; //초대여부
+    int Fine;
+
+    public int getFine() {
+        return Fine;
+    }
+
+    public void setFine(int fine) {
+        Fine = fine;
+    }
 
     public UserItem(){
 
@@ -27,6 +36,13 @@ public class UserItem implements Parcelable {
         this.id=id;
         this.name=name;
         this.invite=invite;
+    }
+
+    public UserItem(int id,String name,int Fine)
+    {
+        this.id = id;
+        this.name = name;
+        this.Fine = Fine;
     }
 
     public int getId() {

@@ -45,25 +45,14 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-//        center_view = findViewById(R.id.login_center_view);
-//        inputManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-//        loginView=findViewById(R.id.login);
-//        softKeyboard =new SoftKeyboard(loginView,inputManager);
-//        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-//            @Override
-//            public void onSoftKeyboardHide() {
-//
-//            }
-//            @Override
-//            public void onSoftKeyboardShow() {
-//                RegisterActivity.this.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        center_view.setVisibility(View.GONE);
-//                    }
-//                });
-//            }
-//        });
+
+        findViewById(R.id.register_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         editText_ID = findViewById(R.id.register_edit_id);
         textView_ID_check = findViewById(R.id.register_id_check);
         textView_ID_check.setVisibility(View.GONE);  // 이미 존재하는 ID입니다. GONE

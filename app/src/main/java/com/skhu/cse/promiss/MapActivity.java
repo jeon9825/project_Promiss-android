@@ -151,6 +151,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                if(i==0){
                                    BasicDB.setId(getApplicationContext(),-1);
                                    BasicDB.setAppoint(getApplicationContext(),-1);
+                                   BasicDB.setPREF_Result(getApplicationContext(),-1);
                                    Intent service = new Intent(MapActivity.this,PromissService.class);
                                    stopService(service);
                                    Intent intent = new Intent(MapActivity.this, LoginActivity.class);
@@ -158,8 +159,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                    if(pusher!=null)
                                    pusher.disconnect();
                                    finish();
+                               }else if(i==1)
+                               {
+                                   Intent intent = new Intent(MapActivity.this, ChangePassword.class);
+                                   startActivity(intent);
                                }
-                                else if(i==2) {
+                                else{
                                     Intent intent = new Intent(MapActivity.this, DeleteActivity.class);
                                     startActivity(intent);
                                 }
@@ -222,10 +227,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void SetGameSetiing(int id){
-
-
-
-
 
         recyclerView = findViewById(R.id.map_member_list);
         MapActivity.this.runOnUiThread(new Runnable() {
@@ -314,6 +315,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
                     if(fine_time!=0) {
+                        if(fine_timer!=null)
                         fine_timer.cancel();
                         fine_timer = new Timer();
                         fine_timer.schedule(new FineTimer(fine_time, 0), 0, 1000);
@@ -396,15 +398,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         resultLayout.setVisibility(View.VISIBLE);
 
 
-        resultLayout.findViewById(R.id.map_result_go).getRootView().setOnClickListener(new View.OnClickListener() {
+        resultLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MapActivity.this,ResultActivity.class);
+                startActivity(intent);
+                hideResultLayout();
+            }
+        });
+        resultLayout.findViewById(R.id.map_result_go).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 //결과보기 화면으로 넘어간다.
+                Intent intent = new Intent(MapActivity.this,ResultActivity.class);
+                startActivity(intent);
+                hideResultLayout();
             }
         });
     }
 
+    public void hideResultLayout(){
+        resultLayout.setVisibility(View.GONE);
+    }
     public void SetMemberMarker(double latitude,double longitude,String name)
     {
         Marker marker = new Marker();
@@ -463,10 +479,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         appointMarker.setCaptionTextSize(16);
         appointMarker.setMap(map);
 
-        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(latitude, longitude))
-                .animate(CameraAnimation.Easing);
-        if(map!=null)
-        map.moveCamera(cameraUpdate);
+        if(circle ==null) {
+            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(latitude, longitude))
+                    .animate(CameraAnimation.Easing);
+            if (map != null)
+                map.moveCamera(cameraUpdate);
+        }else
+        {
+            CameraUpdate cameraUpdate = CameraUpdate.fitBounds(circle.getBounds());
+            map.moveCamera(cameraUpdate);
+        }
 
     }
 
@@ -521,6 +543,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     final double longitude = object.getDouble("longitude");
                     final double radius = object.getDouble("radius");
 
+                    int fine_time= object.getInt("Fine_current");
+
+
+                    if(fine_time!=0) {
+                        if(fine_timer!=null)
+                            fine_timer.cancel();
+                        fine_timer = new Timer();
+                        fine_timer.schedule(new FineTimer(fine_time, 0), 0, 1000);
+
+                    }
 
                     MapActivity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -528,9 +560,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             findViewById(R.id.map_appoint_time).setVisibility(View.VISIBLE); // 시간 보이게 하기
                             ((TextView)findViewById(R.id.map_add_btn)).setText("약속 상세보기");
                             ((TextView)findViewById(R.id.map_appoint_address)).setText(name);
+
+                            SetCircle(latitude,longitude,radius); //원 생성
                             if(appointMarker==null)
                                 SetAppointmentMarker(latitude,longitude,name);
-                            SetCircle(latitude,longitude,radius); //원 생성
                         }
 
                     });
@@ -554,6 +587,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         double user_longitude = member.getDouble("longitude");
 
                         arrayList.add(new UserItem(user_id,user_name,false));
+
+                        if(user_id==UserData.shared.getId()) //벌금 가져오기
+                        {
+                            int FIne = member.getInt("Fine_current");
+                            MapActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Fine_current.setText(FIne+"원");
+                                }
+                            });
+                        }
 
                         MapActivity.this.runOnUiThread(new Runnable() {
                             @Override
@@ -581,8 +625,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 }else //약속 대기중 or 끝남
                 {
-
-
                     object = object.getJSONObject("message");
 
 
@@ -612,9 +654,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         });
                     }
                 }
-
-
-
             }catch (JSONException e)
             {
                 e.printStackTrace();
@@ -628,8 +667,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
             }
-
-
         }
     };
 
@@ -1007,18 +1044,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     {
                         second_S = ""+second;
                     }
-
                     String timer_S ;
 
                     if(minute>0)
                     {
-                        timer_S = second_S;
+                        timer_S = minute_S+"분";
                     }else
                     {
-                        timer_S= minute_S;
+                        timer_S= second_S+"초";
                     }
-
-
                    Fine_time.setText(timer_S);
                 }
             });

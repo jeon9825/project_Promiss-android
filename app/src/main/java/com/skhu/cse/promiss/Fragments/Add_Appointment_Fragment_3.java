@@ -64,7 +64,7 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         date_S = ""+year+"-"+month+"-"+day;
 
         date.setText(date_S);
-        if(hour<=21&&hour>0||hour==21&&minute==0)
+        if(hour<=21&&hour>=0||hour==21&&minute==0)
         appoint_hour = hour+3;
         else if(hour >21)
         {
