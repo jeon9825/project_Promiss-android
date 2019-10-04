@@ -152,6 +152,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (object.getString("result").equals("OK")) {
 
                     BasicDB.setAppoint(getApplicationContext(),-1);
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     DetailActivity.this.runOnUiThread(new Runnable() {

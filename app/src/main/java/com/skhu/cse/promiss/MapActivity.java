@@ -43,6 +43,7 @@ import com.skhu.cse.promiss.Items.AppointmentData;
 import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.Items.UserItem;
 import com.skhu.cse.promiss.Service.PromissService;
+import com.skhu.cse.promiss.Service.Recogition;
 import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.server.GetJson;
 
@@ -88,6 +89,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Timer fine_timer;
     TextView Fine_time;
     final public int ADD_APPOINTMENT = 2002;
+    final public int Delete_Appointment= 2000;
+    final public int Delete_user = 100;
     boolean isAppointment = false;
 
     @Override
@@ -116,7 +119,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-        final String[] menu={"로그아웃","비밀번호 변경","회원 탈퇴"};
+        final String[] menu={"로그아웃","비밀번호 변경","음성 기능 ON","회원 탈퇴"};
 
         TextView name = findViewById(R.id.map_title_user_name);
         name.setText("ID: "+ UserData.shared.getName());
@@ -129,7 +132,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 if (textView.getText().toString().equals("약속 상세보기")) {
                     Intent intent = new Intent(MapActivity.this,DetailActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,Delete_Appointment);
                 } else {
                     Intent intent = new Intent(MapActivity.this, AddAppointmentActivity.class);
                     startActivityForResult(intent,ADD_APPOINTMENT);
@@ -164,9 +167,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                    Intent intent = new Intent(MapActivity.this, ChangePassword.class);
                                    startActivity(intent);
                                }
-                                else{
+                               else if(i==2){
+                                   if(menu[i].equals("음성 기능 ON"))
+                                   {
+                                       menu[i] = "음성 기능 OFF";
+                                       Intent service = new Intent(MapActivity.this, Recogition.class);
+                                       ContextCompat.startForegroundService(getApplicationContext(), service);//음성인식 서비스 실행
+                                   }else
+                                   {
+                                       menu[i] = "음성 기능 ON";
+                                       Intent service = new Intent(MapActivity.this, Recogition.class);
+                                       stopService(service);
+                                   }
+                               }
+                                else if(i==3){
                                     Intent intent = new Intent(MapActivity.this, DeleteActivity.class);
-                                    startActivity(intent);
+                                    startActivityForResult(intent,Delete_user);
                                 }
                             }
                         });
@@ -872,9 +888,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            GetAppointment();
-        }
+
+       if(requestCode==Delete_Appointment || requestCode ==ADD_APPOINTMENT)
+       {
+           if(resultCode==RESULT_OK){
+               GetAppointment();
+           }
+       }else if(requestCode == Delete_user){
+           if(resultCode==RESULT_OK){
+               Intent intent = new Intent(MapActivity.this,LoginActivity.class);
+               startActivity(intent);
+               finish();
+           }
+       }
+
     }
 
     @Override

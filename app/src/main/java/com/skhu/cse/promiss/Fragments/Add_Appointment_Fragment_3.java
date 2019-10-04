@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.skhu.cse.promiss.AddAppointmentActivity;
@@ -20,6 +21,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,9 +74,28 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
             date_S = ""+year+"-"+month+"-"+day;
             date.setText(date_S);
         }
+
+        String time_S;
+        if(appoint_hour>12)
+            time_S="오후 "+(appoint_hour-12);
+        else if(appoint_hour==12)
+            time_S="오후 "+appoint_hour;
+        else
+        {
+           if(appoint_hour<10)
+               time_S="오전 0"+appoint_hour;
+           else
+               time_S="오전 "+appoint_hour;
+        }
+
+
         appoint_minute = minute;
+        if(minute<10)
+            time_S = time_S + ":0"+minute;
+        else
+        time_S = time_S + ":"+minute;
         hourOfDay= appoint_hour+":"+minute;
-        time.setText(hourOfDay);
+        time.setText(time_S);
 
 
         main=this;
@@ -115,8 +136,29 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
             @Override
             public void onClick(View view) {
                 //넘어가는 부분
-                ((AddAppointmentActivity)getActivity()).setAppointment_Date(date_S,hourOfDay);
-                ((AddAppointmentActivity)getActivity()).Next();
+                Calendar temp = Calendar.getInstance();
+                temp.set(Calendar.HOUR_OF_DAY,appoint_hour);
+                String[] date_array= date.getText().toString().split("-");
+                String[] time_S = hourOfDay.split(":");
+
+
+                GregorianCalendar now = new GregorianCalendar(temp.get(Calendar.YEAR),
+                        temp.get(Calendar.MONTH)+1,temp.get(Calendar.DAY_OF_MONTH),
+                        temp.get(Calendar.HOUR_OF_DAY),temp.get(Calendar.MINUTE));
+
+                GregorianCalendar appoint = new GregorianCalendar(Integer.parseInt(date_array[0]),
+                        Integer.parseInt(date_array[1]),Integer.parseInt(date_array[2]),
+                        Integer.parseInt(time_S[0]),Integer.parseInt(time_S[1]));
+
+                long diff=appoint.getTimeInMillis()-now.getTimeInMillis();
+
+                if(diff>0) {
+                    ((AddAppointmentActivity) getActivity()).setAppointment_Date(date_S, hourOfDay);
+                    ((AddAppointmentActivity) getActivity()).Next();
+                }else
+                {
+                    Toast.makeText(getActivity(),"현재 시간보다 3시간 이후로\n 설정해주세요",Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -124,7 +166,7 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String temp ;
 
-        temp=""+year+"."+(monthOfYear+1)+"."+dayOfMonth;
+        temp=""+year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
         date_S = ""+year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
         date.setText(temp);
     }
@@ -135,15 +177,26 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
 
 
         this.hourOfDay=hourOfDay+":"+minute;
-        if(hourOfDay>12)
+        if(hourOfDay>12){
+            if(hourOfDay-12<10)
+                time_S="오후 0"+(hourOfDay-12);
+                else
             time_S="오후 "+(hourOfDay-12);
+        }
         else if(hourOfDay==12)
             time_S="오후 "+hourOfDay;
+        else{
+            if(hourOfDay<10)
+                time_S="오전 0"+hourOfDay;
+            else
+                time_S="오전 "+hourOfDay;
+        }
+
+
+        if(minute<10)
+        time_S+=":0"+minute;
         else
-            time_S="오전 "+hourOfDay;
-
-        time_S+=":"+minute;
-
+            time_S+=":"+minute;
         time.setText(time_S);
     }
 }

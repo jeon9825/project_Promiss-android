@@ -50,7 +50,7 @@
             android:drawableLeft="@drawable/location"
             android:background="@drawable/stroke_white"
             android:layout_below="@id/map"
-            android:text="서울시 구로구 항동"
+            android:text=""
             />
 
         <TextView

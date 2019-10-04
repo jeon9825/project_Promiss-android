@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.database.BasicDB;
 import com.skhu.cse.promiss.keyboard.SoftKeyboard;
 import com.skhu.cse.promiss.server.GetJson;
@@ -40,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     RelativeLayout loginView;
     View center_view;
     SoftKeyboard softKeyboard;
+    boolean check =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,24 @@ public class RegisterActivity extends AppCompatActivity {
         editText_ID = findViewById(R.id.register_edit_id);
         textView_ID_check = findViewById(R.id.register_id_check);
         textView_ID_check.setVisibility(View.GONE);  // 이미 존재하는 ID입니다. GONE
+
+        editText_ID.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(textView_ID_check.getVisibility()==View.VISIBLE)
+                    textView_ID_check.setVisibility(View.GONE);
+            }
+        });
         editText_PW = findViewById(R.id.register_edit_password);
         editText_PW_check = findViewById(R.id.register_edit_password_check);
         textView_PW_check = findViewById(R.id.register_pw_check);
@@ -68,10 +88,14 @@ public class RegisterActivity extends AppCompatActivity {
                 final String pw_check = editText_PW_check.getText().toString();
                 if (id != null && id.equals("")) {
                     Toast.makeText(getApplicationContext(),"아이디를 입력하십시오.",Toast.LENGTH_LONG).show();
+                    return;
                 }
                 if(pw!=null&&pw.equals("")){
-                    Toast.makeText(getApplicationContext(),"비밀번호를 입력하십시오.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"비밀번호를 확인해주세요.",Toast.LENGTH_LONG).show();
+                    return;
                 }
+
+                if(!check) return;
                 new Thread() {
                     @Override
                     public void run() {
@@ -98,7 +122,13 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if(editText_PW_check.getText().toString().equals(editText_PW.getText().toString())){
                     textView_PW_check.setText("일치 ");
+                    check=true;
                     textView_PW_check.setTextColor(getResources().getColor(R.color.same));
+                }else
+                {
+                    check=false;
+                    textView_PW_check.setText("비밀번호가 일치하지 않습니다.");
+                    textView_PW_check.setTextColor(getResources().getColor(R.color.error));
                 }
             }
         });
@@ -127,6 +157,9 @@ public class RegisterActivity extends AppCompatActivity {
                    object =object.getJSONObject("data");
                     BasicDB.setUserInfo(getApplicationContext(),object.getString("user_name"),object.getString("user_pw"),object.getInt("id"));
 
+                    UserData.shared.setId(object.getInt("id"));
+                    UserData.shared.setName(object.getString("user_name"));
+                    BasicDB.setPREF_Result(getApplicationContext(),-1);
                     BasicDB.setAppoint(getApplicationContext(),-1);
 
                     Intent intent = new Intent(RegisterActivity.this, MapActivity.class);

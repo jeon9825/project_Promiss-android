@@ -1,9 +1,13 @@
 package com.skhu.cse.promiss;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,39 +46,56 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout layout;
     SoftKeyboard softKeyboard;
 
+    final private int MY_PERMISSIONS_REQUEST_READ_CONTACTS =200;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        center_view = findViewById(R.id.login_center_view);
-        inputManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+//        inputManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         loginView = findViewById(R.id.login);
-        softKeyboard = new SoftKeyboard(loginView, inputManager);
-        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-            @Override
-            public void onSoftKeyboardHide() {
-
-                LoginActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        center_view.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-
-            @Override
-            public void onSoftKeyboardShow() {
-                LoginActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        center_view.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });
+//        softKeyboard = new SoftKeyboard(loginView, inputManager);
+//        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+//            @Override
+//            public void onSoftKeyboardHide() {
+//
+//                LoginActivity.this.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        center_view.setVisibility(View.VISIBLE);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onSoftKeyboardShow() {
+//                LoginActivity.this.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        center_view.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//        });
         layout=findViewById(R.id.login_login_layout);
 
-        if(BasicDB.getID(getApplicationContext())==-1) //초기화 or 다시 로그인
+        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+
+            ActivityCompat.requestPermissions(LoginActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.RECORD_AUDIO},
+                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+        }else {
+            GoMain();
+        }
+
+    }
+
+    public void GoMain(){
+        if (BasicDB.getID(getApplicationContext()) == -1) //초기화 or 다시 로그인
         {
             layout.setVisibility(View.VISIBLE);
             editText_id = (EditText) findViewById(R.id.login_edit_id);
@@ -102,34 +123,30 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
             register_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
+                                                   @Override
+                                                   public void onClick(View view) {
+                                                       Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                                                       startActivity(intent);
+                                                       finish();
+                                                   }
+                                               }
             );
-        }else //이미 로그인
+        } else //이미 로그인
         {
-            UserData data=UserData.shared;
+            UserData data = UserData.shared;
             data.setId(BasicDB.getID(getApplicationContext()));
             data.setName(BasicDB.getUserId(getApplicationContext()));
 
-            new Handler().postDelayed(new Runnable()
-            {
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void run()
-                {
-                    Intent intent=new Intent(LoginActivity.this,MapActivity.class);
+                public void run() {
+                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                     startActivity(intent);
                     finish();
                 }
             }, 500);
 
         }
-
-
     }
 
     private Callback callback = new Callback() {
@@ -177,8 +194,33 @@ public class LoginActivity extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+
             }
             // JSONArray array;
         }
     };
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    GoMain();
+                } else {
+                    // permission denied, boo! Disable the
+                    Toast.makeText(LoginActivity.this,"권한을 허용해주세요",Toast.LENGTH_LONG).show();
+                    finish();
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
 }

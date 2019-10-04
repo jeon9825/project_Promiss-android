@@ -23,6 +23,20 @@ public class GetJson {
     /**
      * 웹 서버로 요청을 한다.
      */
+
+    public void PostSpeekRequest(String Text, int Id, Callback callback) {
+
+        FormBody body = new FormBody.Builder()
+                .add("message", Text)
+                .add("id", "" + Id)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url + "api/promiss/ai")
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
     public void requestGet(String parameter, Callback callback) {
 
         Request request = new Request.Builder()

@@ -37,6 +37,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     // 서버
     implementation("com.squareup.okhttp3:okhttp:4.2.0")
+
+    //wave
+    implementation 'com.dnkilic.waveform:waveform:0.9.3'
     //Tag
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
     //Date

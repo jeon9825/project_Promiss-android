@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class Add_Appointment_Fragment_5 extends Fragment {
     private ArrayList<Integer> ids=new ArrayList<>();
     private ArrayList<String> names=new ArrayList<>();
 
+    private  ArrayList<String> user_names = new ArrayList<>();
     public Add_Appointment_Fragment_5() {
         // Required empty public constructor
     }
@@ -92,7 +94,8 @@ public class Add_Appointment_Fragment_5 extends Fragment {
             @Override
             public void onTagClick(String tag) {
 
-                int position = names.indexOf(tag);
+                int position = user_names.indexOf(tag);
+                Log.d("log",position+"");
                 arrayList.get(position).setInvite(false);
                 adapter.notifyDataSetChanged();
                 names.remove(tag);
@@ -106,7 +109,7 @@ public class Add_Appointment_Fragment_5 extends Fragment {
             @Override
             public void onClick(View view) {
                 //입력한 값으로 검색
-
+                user_names.clear();
                 arrayList.clear();
                 new Thread(){
                     @Override
@@ -182,8 +185,7 @@ public class Add_Appointment_Fragment_5 extends Fragment {
                     boolean invite =false;
                     if(ids.contains(id))
                         invite=true;
-
-
+                    user_names.add(name);
                     arrayList.add(new UserItem(id,name,invite));
 
                     getActivity().runOnUiThread(new Runnable() {

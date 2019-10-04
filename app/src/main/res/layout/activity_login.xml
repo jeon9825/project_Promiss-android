@@ -21,16 +21,10 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"/>
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/login_center_view"
-        android:layout_below="@id/login_promiss">
-    </View>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_below="@id/login_center_view"
+        android:layout_below="@id/login_promiss"
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:id="@+id/login_login_layout"
@@ -98,7 +92,7 @@
         android:layout_marginTop="20dp"
         android:layout_below="@id/login_edit_password"
         android:textColor="@color/mainColor2"
-        android:background="@color/mainColor3"
+        android:background="@drawable/corner_maincolor3"
         android:textSize="24sp"
         />
 
@@ -113,7 +107,7 @@
         android:layout_marginTop="10dp"
         android:text="회원가입"
         android:textColor="@android:color/white"
-        android:background="@drawable/corner_maincolor3"
+        android:background="@null"
         />
     </RelativeLayout>
 </RelativeLayout>

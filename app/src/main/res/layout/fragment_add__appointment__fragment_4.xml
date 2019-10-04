@@ -161,7 +161,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분 마다 측정합니다."
+                android:text="원이 부과됩니다"
                 android:layout_marginLeft="10dp"
                 android:id="@+id/frg_appointment_4_t8"
                 android:layout_alignParentRight="true"

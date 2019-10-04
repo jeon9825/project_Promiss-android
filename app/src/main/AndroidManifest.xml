@@ -13,8 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ResultActivity"></activity>
-        <activity android:name=".AddFriendActivity"></activity>
+        <activity android:name=".PasswordCheck"></activity>
+        <activity
+            android:name=".SiriActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.Transparent" />
+
+        <activity android:name=".ResultActivity" />
+
+        <activity android:name=".AddFriendActivity" />
         <activity android:name=".DetailActivity" />
         <activity android:name=".LocationSettingAcvtivity" />
         <activity
@@ -23,9 +30,7 @@
         <activity android:name=".DeleteActivity" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".RegisterActivity" />
-
         <activity android:name=".MapActivity" />
-
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="adjustResize">
@@ -40,11 +45,26 @@
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="ke4acfug28" />
 
+        <service
+            android:name=".Service.Recogition"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.speech.RecognitionService" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <service android:name=".Service.PromissService" />
     </application>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
