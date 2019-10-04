@@ -439,24 +439,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public int GetColor(int index)
     {
-        index %= 6;
+        index %= 4;
         switch (index)
         {
             case 0:
-                return Color.RED;
+                return getResources().getColor(R.color.member1);
             case 1:
-                return getResources().getColor(R.color.mainColor1); //blue
+                return getResources().getColor(R.color.member2); //blue
             case 2:
-                return Color.CYAN;
+                return getResources().getColor(R.color.member3);
 
-            case 3:
-                return Color.YELLOW;
-            case 4:
-                return Color.MAGENTA;
-            case 5:
-                return Color.LTGRAY;
-                default:
-                    return Color.GREEN;
+            default:
+                return getResources().getColor(R.color.same);
+
         }
     }
 

@@ -26,6 +26,7 @@ import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.PolylineOverlay;
+import com.naver.maps.map.util.MarkerIcons;
 import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.Items.UserItem;
 import com.skhu.cse.promiss.custom.PromissDialog;
@@ -196,7 +197,8 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
             marker.setMap(null);
         }
         markers.clear();
-
+        position.clear();
+        radius.clear();
         polyline.setMap(null);
     }
     //약속 원 만들기  Clear
@@ -214,7 +216,23 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
         CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polyline.getBounds());
         map.moveCamera(cameraUpdate);
     }
+    public int GetColor(int index)
+    {
+        index %= 4;
+        switch (index)
+        {
+            case 0:
+                return getResources().getColor(R.color.member1);
+            case 1:
+                return getResources().getColor(R.color.member2); //blue
+            case 2:
+                return getResources().getColor(R.color.member3);
 
+            default:
+                return getResources().getColor(R.color.same);
+
+        }
+    }
 
     private Callback results = new Callback() {
         @Override
@@ -329,6 +347,8 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
                 marker.setTag(tag);
+                marker.setIcon(MarkerIcons.BLACK);
+                marker.setIconTintColor(GetColor(arrayList.size()-1));
                 marker.setOnClickListener(new Overlay.OnClickListener() {
                     @Override
                     public boolean onClick(@NonNull Overlay overlay) {
@@ -345,6 +365,7 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                 @Override
                 public void run() {
                     polyline.setCoords(position);
+                    polyline.setColor(getResources().getColor(R.color.mainColor1));
                     polyline.setMap(map);
                     for (Marker marker : markers) {
                         marker.setMap(map);

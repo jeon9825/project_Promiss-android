@@ -8,4 +8,8 @@
     <color name="mainColor3">#FFF575</color>
     <color name="error">#F8696E</color>
     <color name="same">#00B0F0</color>
+
+    <color name="member1">#f8696e</color>
+    <color name="member2">#ed7d31</color>
+    <color name="member3">#ffc000</color>
 </resources>
