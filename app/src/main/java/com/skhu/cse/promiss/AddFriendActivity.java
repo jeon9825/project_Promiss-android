@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private ArrayList<UserItem> arrayList;
     private TagGroup tagGroup;
 
+    Button button;
     private ImageButton text_delete;
     private EditText search;
 
@@ -54,7 +56,7 @@ public class AddFriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_add__appointment__fragment_5);
         findViewById(R.id.frg_appointment_5_t1).setVisibility(View.GONE);
-
+        button =  findViewById(R.id.frg_appointment_5_btn);
         Intent data = getIntent();
         arrayList = data.getParcelableArrayListExtra("data");
         recyclerView=findViewById(R.id.frg_appointment_5_recycler);

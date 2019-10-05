@@ -117,7 +117,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             fm.beginTransaction().add(R.id.map, mapFragment).commit();
         }
 
-
+        Fine_time = findViewById(R.id.map_Fine_time);
+        Fine_current = findViewById(R.id.map_current_Fine);
 
         final String[] menu={"로그아웃","비밀번호 변경","음성 기능 ON","회원 탈퇴"};
 
@@ -195,8 +196,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void showFineLayout(){
         Fine_layout.setVisibility(View.VISIBLE);
 
-        Fine_current = Fine_layout.findViewById(R.id.map_current_Fine);
-        Fine_time = Fine_layout.findViewById(R.id.map_Fine_time);
     }
 
     public void hideFineLayout(){
@@ -1066,7 +1065,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     {
                         second_S = ""+second;
                     }
-                    String timer_S ;
+                    String timer_S="" ;
 
                     if(minute>0)
                     {
