@@ -2,6 +2,7 @@ package com.skhu.cse.promiss;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -129,6 +130,22 @@ public class ChangePassword extends AppCompatActivity {
             }
         });
     }
+    public void goLogin(){
+        BasicDB.setId(getApplicationContext(),-1);
+        BasicDB.setAppoint(getApplicationContext(),-1);
+        BasicDB.setPREF_Result(getApplicationContext(),-1);
+
+        findViewById(R.id.go_to_login).setVisibility(View.VISIBLE);
+        findViewById(R.id.change_password_btn_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChangePassword.this,LoginActivity.class);
+                startActivity(intent);
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+    }
 
     private Callback callback = new Callback() {
         @Override
@@ -147,9 +164,22 @@ public class ChangePassword extends AppCompatActivity {
                 if(object.getInt("result")==1000)
                 {
                     String message = object.getString("data");
+
+                    ChangePassword.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ChangePassword.this, message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }else
                 {
-                    finish();
+                    ChangePassword.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            goLogin();
+                        }
+                    });
+
                 }
             }catch (JSONException e)
             {

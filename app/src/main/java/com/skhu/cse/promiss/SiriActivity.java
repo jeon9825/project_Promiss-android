@@ -150,7 +150,7 @@ public class SiriActivity extends Activity {
     public void AddTextView(String send, String message){
         TextView view=new TextView(SiriActivity.this);
         view.setText(message);
-        view.setTextSize(18.5f);
+        view.setTextSize(16.5f);
         if(arrayList.size()>4)
         {
             TextView tv=arrayList.get(0);

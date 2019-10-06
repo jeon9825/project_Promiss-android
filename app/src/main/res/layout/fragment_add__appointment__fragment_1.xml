@@ -34,7 +34,7 @@
             android:layout_below="@id/frg_appointment_1_t1"
             android:layout_marginTop="10dp"
             android:id="@+id/frg_appointment_1_t2"
-            android:text="어떤 약속인지 알수 있도록 이름을 정해주세요"
+            android:text="어떤 약속인지 알수 있도록 이름을 정해주세요."
             android:textColor="#ffffff"
             />
 

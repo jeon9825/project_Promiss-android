@@ -91,6 +91,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     final public int ADD_APPOINTMENT = 2002;
     final public int Delete_Appointment= 2000;
     final public int Delete_user = 100;
+    final public int ChangePassword = 101;
     boolean isAppointment = false;
 
     @Override
@@ -104,6 +105,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+
 
         resultLayout = findViewById(R.id.map_result_layout);
         time_textView = findViewById(R.id.map_appoint_time);
@@ -121,6 +124,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Fine_current = findViewById(R.id.map_current_Fine);
 
         final String[] menu={"로그아웃","비밀번호 변경","음성 기능 ON","회원 탈퇴"};
+
+        if(BasicDB.getVoice(getApplicationContext())==1)
+            menu[2]="음성 기능 OFF";
 
         TextView name = findViewById(R.id.map_title_user_name);
         name.setText("ID: "+ UserData.shared.getName());
@@ -166,16 +172,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                }else if(i==1)
                                {
                                    Intent intent = new Intent(MapActivity.this, ChangePassword.class);
-                                   startActivity(intent);
+                                   startActivityForResult(intent,ChangePassword);
                                }
                                else if(i==2){
                                    if(menu[i].equals("음성 기능 ON"))
                                    {
+                                       BasicDB.setVoice(getApplicationContext(),1);
                                        menu[i] = "음성 기능 OFF";
                                        Intent service = new Intent(MapActivity.this, Recogition.class);
                                        ContextCompat.startForegroundService(getApplicationContext(), service);//음성인식 서비스 실행
                                    }else
                                    {
+                                       BasicDB.setVoice(getApplicationContext(),0);
                                        menu[i] = "음성 기능 ON";
                                        Intent service = new Intent(MapActivity.this, Recogition.class);
                                        stopService(service);
@@ -369,7 +377,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             MapActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Fine_current.setText(FIne+"");
+                                    Fine_current.setText(FIne+"원");
                                 }
                             });
                         }
@@ -442,7 +450,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         marker.setPosition(new LatLng(latitude,longitude));
         marker.setCaptionTextSize(15);
         marker.setIcon(MarkerIcons.BLACK);
-        marker.setIconTintColor(GetColor(markerArrayList.size()-1));
+        marker.setIconTintColor(GetColor(markerArrayList.size()));
         marker.setCaptionText(name);
         marker.setHideCollidedSymbols(true);
 
@@ -666,16 +674,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }catch (JSONException e)
             {
-                e.printStackTrace();
 
-                MapActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MapActivity.this, "서버 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
-                       BasicDB.setAppoint(getApplicationContext(),-1);
-                      //  finish();
-                    }
-                });
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if(object.getString("result").equals("NG"))
+                        BasicDB.setAppoint(getApplicationContext(),-1);
+                    e.printStackTrace();
+
+
+                }catch (JSONException e2) {
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MapActivity.this, "서버 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
+                            BasicDB.setAppoint(getApplicationContext(), -1);
+                            //  finish();
+                        }
+                    });
+                }
             }
         }
     };
@@ -897,6 +913,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
            if(resultCode==RESULT_OK){
                Intent intent = new Intent(MapActivity.this,LoginActivity.class);
                startActivity(intent);
+               finish();
+           }
+       }else if(requestCode == ChangePassword)
+       {
+           if(resultCode==RESULT_OK){
                finish();
            }
        }

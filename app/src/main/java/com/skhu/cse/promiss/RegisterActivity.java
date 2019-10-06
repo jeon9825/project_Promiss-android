@@ -95,7 +95,10 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(!check) return;
+                if(!check) {
+                    Toast.makeText(getApplicationContext(),"비밀번호를 확인해주세요.",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 new Thread() {
                     @Override
                     public void run() {
@@ -121,11 +124,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if(editText_PW_check.getText().toString().equals(editText_PW.getText().toString())){
+                    textView_PW_check.setVisibility(View.VISIBLE);
                     textView_PW_check.setText("일치 ");
                     check=true;
                     textView_PW_check.setTextColor(getResources().getColor(R.color.same));
                 }else
                 {
+                    textView_PW_check.setVisibility(View.VISIBLE);
                     check=false;
                     textView_PW_check.setText("비밀번호가 일치하지 않습니다.");
                     textView_PW_check.setTextColor(getResources().getColor(R.color.error));

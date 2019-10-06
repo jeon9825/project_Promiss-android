@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@color/mainColor3"
+                android:background="@drawable/corner_maincolor3"
                 android:text="약속 나가기"
                 android:textColor="@color/mainColor2"
                 android:textSize="17sp"

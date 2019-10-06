@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,13 +51,14 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private ArrayList<Integer> ids=new ArrayList<>();
     private ArrayList<String> names=new ArrayList<>();
-
+    private  ArrayList<String> user_names = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_add__appointment__fragment_5);
         findViewById(R.id.frg_appointment_5_t1).setVisibility(View.GONE);
         button =  findViewById(R.id.frg_appointment_5_btn);
+        button.setText("친구 추가하기");
         Intent data = getIntent();
         arrayList = data.getParcelableArrayListExtra("data");
         recyclerView=findViewById(R.id.frg_appointment_5_recycler);
@@ -72,6 +74,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 ids.add(item.getId());
                 names.add(name);
                 tagGroup.setTags(names);
+
             }
         });
 
@@ -81,8 +84,14 @@ public class AddFriendActivity extends AppCompatActivity {
         tagGroup=findViewById(R.id.frg_appointment_5_tagGroup);
         tagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
             @Override
-            public void onTagClick(String tag) {
+            public void onTagClick(String tag)
+            {
+                int position = user_names.indexOf(tag);
+                Log.d("log",position+"");
+                arrayList.get(position).setInvite(false);
+                adapter.notifyDataSetChanged();
                 names.remove(tag);
+                tagGroup.setTags(names);
             }
         });
         tagGroup.setTags(names);
@@ -93,6 +102,7 @@ public class AddFriendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //입력한 값으로 검색
 
+                user_names.clear();
                 arrayList.clear();
                 new Thread(){
                     @Override
@@ -236,6 +246,7 @@ public class AddFriendActivity extends AppCompatActivity {
                     if(ids.contains(id))
                         invite=true;
 
+                    user_names.add(name);
 
                     arrayList.add(new UserItem(id,name,invite));
 

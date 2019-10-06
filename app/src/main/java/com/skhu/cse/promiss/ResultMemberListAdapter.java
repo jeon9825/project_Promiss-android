@@ -72,6 +72,12 @@ public class ResultMemberListAdapter extends RecyclerView.Adapter<RecyclerView.V
         userIistViewholder.button.setBackgroundResource(GetBackground(position));
         userIistViewholder.fine.setText(item.getFine()+"원");
 
+        userIistViewholder.fine.getRootView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                event.afterClick(view,position);
+            }
+        });
 
     }
 

@@ -13,6 +13,7 @@ public class BasicDB {
         static final String PREF_ID="id";
         static final String PREF_Appoint="appoint";
         static final String PREF_Result="result";
+        static final String PREF_Voice  ="voice";
 
         public static SharedPreferences getSharedPreferences(Context ctx) {
             return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -35,6 +36,18 @@ public class BasicDB {
         {
             return getSharedPreferences(ctx).getInt(PREF_Result,-1);
         }
+
+    public static int getVoice(Context ctx) {
+        return getSharedPreferences(ctx).getInt(PREF_Voice, 0);
+    }
+    public static boolean setVoice(Context ctx,int voice)
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putInt(PREF_Voice, voice);
+        editor.commit();
+        return true;
+    }
+
 
         public static boolean setPREF_Result(Context ctx,int result)
         {

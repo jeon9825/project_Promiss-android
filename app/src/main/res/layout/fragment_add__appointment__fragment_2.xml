@@ -27,7 +27,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/frg_appointment_2_t2"
         android:layout_below="@id/frg_appointment_2_t1"
-        android:text="만날 장소를 정해주세요"
+        android:text="만날 장소를 정해주세요."
         android:textColor="#ffffff"
         />
 

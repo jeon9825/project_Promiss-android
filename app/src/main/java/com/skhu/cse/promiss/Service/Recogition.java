@@ -156,7 +156,8 @@ public class Recogition extends RecognitionService {
         end = true;
         mSrRecognizer.destroy();
         mHdrVoiceRecoState.sendEmptyMessage(MSG_VOICE_RECO_READY); //음성인식 서비스 다시 시작
-
+        if(mAudioManager!=null)
+        mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
     }
 
 

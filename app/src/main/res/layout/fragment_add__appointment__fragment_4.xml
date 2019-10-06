@@ -30,7 +30,7 @@
         android:layout_below="@id/frg_appointment_4_t1"
         android:layout_marginTop="10dp"
         android:id="@+id/frg_appointment_4_t2"
-        android:text="벌금과 벌금을 측정할 주기를 설정해주세요"
+        android:text="벌금과 벌금을 측정할 주기를 설정해주세요."
         android:textColor="#ffffff"
         />
 
@@ -161,7 +161,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="원이 부과됩니다"
+                android:text="원이 부과됩니다."
                 android:layout_marginLeft="10dp"
                 android:id="@+id/frg_appointment_4_t8"
                 android:layout_alignParentRight="true"

@@ -167,8 +167,22 @@ public class Add_Appointment_Fragment_3 extends Fragment implements TimePickerDi
         String temp ;
 
         temp=""+year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
-        date_S = ""+year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
-        date.setText(temp);
+
+        date_S = ""+year+"-";
+
+        if(monthOfYear+1>10)
+            date_S += (monthOfYear+1)+"-";
+        else
+            date_S += "0"+(monthOfYear+1)+"-";
+
+
+
+        if(dayOfMonth>10)
+            date_S += (dayOfMonth);
+        else
+            date_S += "0"+(dayOfMonth)+"-";
+
+        date.setText(date_S);
     }
 
     @Override

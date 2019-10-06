@@ -95,7 +95,7 @@ public class Add_Appointment_Fragment_5 extends Fragment {
             public void onTagClick(String tag) {
 
                 int position = user_names.indexOf(tag);
-                Log.d("log",position+"");
+
                 arrayList.get(position).setInvite(false);
                 adapter.notifyDataSetChanged();
                 names.remove(tag);

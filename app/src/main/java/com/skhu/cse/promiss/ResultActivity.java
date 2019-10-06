@@ -138,6 +138,7 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                 Clearinit();
 
                 if(current_position!=position) {
+                    current_position=position;
                     new Thread() {
                         @Override
                         public void run() {
@@ -176,12 +177,11 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
             String s = response.body().string();
-
+            Log.d("result",s);
             try{
 
                 JSONObject object = new JSONObject(s);
                 setPolylineMarkers(object.getJSONArray("data"));
-
             }catch (JSONException e)
             {
                 e.printStackTrace();
@@ -213,8 +213,8 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
         circle.setRadius(radius);
         circle.setMap(map);
 
-        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polyline.getBounds());
-        map.moveCamera(cameraUpdate);
+//        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polyline.getBounds());
+//        map.moveCamera(cameraUpdate);
     }
     public int GetColor(int index)
     {
@@ -269,6 +269,10 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                     @Override
                     public void run() {
                         nameTV.setText(name);
+
+                        CameraUpdate update = CameraUpdate.scrollTo(new LatLng(appoint_latitude,appoint_longitude));
+
+                        map.moveCamera(update);
                         String[] dates = date.split("-");
                         timeTV.setText(dates[0]+"년"+dates[1]+"월"+dates[2]+"일 "+time.substring(0,5));
                         FineTime.setText("("+fine+"원/"+fine_time+"분)");

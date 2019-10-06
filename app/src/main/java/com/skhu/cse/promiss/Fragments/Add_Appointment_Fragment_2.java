@@ -140,4 +140,9 @@ public class Add_Appointment_Fragment_2 extends Fragment implements OnMapReadyCa
             }
         });
     }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
 }

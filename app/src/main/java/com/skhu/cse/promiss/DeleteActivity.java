@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.skhu.cse.promiss.Items.UserData;
 import com.skhu.cse.promiss.custom.PromissDialog;
@@ -67,15 +68,18 @@ public class DeleteActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
-                                new Thread()
-                                {
-                                    @Override
-                                    public void run() {
-                                        GetJson json = GetJson.getInstance();
+                                if(BasicDB.getUserPw(getApplicationContext()).equals(password.getText().toString())) {
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            GetJson json = GetJson.getInstance();
 
-                                        json.requestPost("api/User/delete",callback,"index", UserData.shared.getId()+"");
-                                    }
-                                }.run();
+                                            json.requestPost("api/User/delete", callback, "index", UserData.shared.getId() + "");
+                                        }
+                                    }.run();
+                                }else {
+                                    Toast.makeText(DeleteActivity.this,"비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show();
+                                }
 
                                 builder.dismiss();
                             }
