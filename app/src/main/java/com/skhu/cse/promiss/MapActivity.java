@@ -679,7 +679,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     JSONObject object = new JSONObject(result);
                     if(object.getString("result").equals("NG")) {
                         BasicDB.setAppoint(getApplicationContext(), -1);
-                        GameEnd();
+                        MapActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                GameEnd();
+                            }
+                        });
+
                     }
                     e.printStackTrace();
 
