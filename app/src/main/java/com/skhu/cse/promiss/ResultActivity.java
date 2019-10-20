@@ -333,24 +333,13 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
             ResultActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(ResultActivity.this, "약속 결과가 부족합니다..", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ResultActivity.this, "실행에 문제가 있었던 약속입니다.", Toast.LENGTH_LONG).show();
                     BasicDB.setPREF_Result(getApplicationContext(), -1);
                     finish();
                 }
             });
         } else {
             try {
-
-                if (results.length() == 0) {
-                    ResultActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(ResultActivity.this, "실행되지 않았던 약속입니다.", Toast.LENGTH_LONG).show();
-                            finish();
-                            BasicDB.setPREF_Result(getApplicationContext(), -1);
-                        }
-                    });
-                }
 
                 for (int i = 0; i < results.length(); i++) {
                     JSONObject member = results.getJSONObject(i);
@@ -426,4 +415,26 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        builder = new PromissDialog.Builder(ResultActivity.this)
+                .setTitle("약속 결과")
+                .setMessage("나가시면 이 정보를 다시 볼 수 없습니다. \n정말로 나가시겠습니까?")
+                .addCancelListener("취소", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder.dismiss();
+                    }
+                }).addOkayListener("나가기", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder.dismiss();
+                        BasicDB.setPREF_Result(getApplicationContext(),-1);
+                        finish();
+                    }
+                }).build();
+        builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경 뒤에 안보이기
+        builder.show();
+    }
+    
 }
