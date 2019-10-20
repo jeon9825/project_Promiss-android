@@ -405,6 +405,18 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                 }
             });
         }
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+            ResultActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(ResultActivity.this,"약속 결과가 부족합니다..",Toast.LENGTH_LONG).show();
+                    BasicDB.setPREF_Result(getApplicationContext(),-1);
+                    finish();
+                }
+            });
+        }
     }
 
 }
