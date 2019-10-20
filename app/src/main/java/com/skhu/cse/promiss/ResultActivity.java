@@ -327,95 +327,102 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     };
 
-    public void setPolylineMarkers(JSONArray results)
-    {
-        try {
+    public void setPolylineMarkers(JSONArray results) {
 
-            if(results.length()==0)
-            {
+        if (results.length() < 2) {
+            ResultActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(ResultActivity.this, "약속 결과가 부족합니다..", Toast.LENGTH_LONG).show();
+                    BasicDB.setPREF_Result(getApplicationContext(), -1);
+                    finish();
+                }
+            });
+        } else {
+            try {
+
+                if (results.length() == 0) {
+                    ResultActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ResultActivity.this, "실행되지 않았던 약속입니다.", Toast.LENGTH_LONG).show();
+                            finish();
+                            BasicDB.setPREF_Result(getApplicationContext(), -1);
+                        }
+                    });
+                }
+
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject member = results.getJSONObject(i);
+                    double user_latitude = member.getDouble("latitude");
+                    double user_longitude = member.getDouble("longitude");
+                    int Fine = member.getInt("Fine_current");
+                    double appoint_radius = member.getDouble("appointment_radius");
+                    position.add(new LatLng(user_latitude, user_longitude));
+                    radius.add(appoint_radius);
+                    int circle_in = member.getInt("circle_in");
+
+                    String date_time = member.getString("time");
+
+                    Marker marker = new Marker();
+                    marker.setPosition(new LatLng(user_latitude, user_longitude));
+                    String tag = "누적벌금: " + Fine + "원";
+
+                    if (circle_in == 1) tag = "[IN]0원부과\n" + tag;
+                    else {
+                        tag = "[OUT] " + fine + "원부과\n" + tag;
+                    }
+
+                    tag = date_time.substring(0, 5) + "\n" + tag;
+
+
+                    marker.setTag(tag);
+                    marker.setIcon(MarkerIcons.BLACK);
+                    marker.setIconTintColor(GetColor(arrayList.size() - 1));
+                    marker.setOnClickListener(new Overlay.OnClickListener() {
+                        @Override
+                        public boolean onClick(@NonNull Overlay overlay) {
+
+                            int position = markers.indexOf((Marker) overlay);
+                            SetCircle(appoint_latitude, appoint_longitude, radius.get(position));
+                            infoWindow.open((Marker) overlay);
+                            return true;
+                        }
+                    });
+                    markers.add(marker);
+                }
                 ResultActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ResultActivity.this,"실행되지 않았던 약속입니다.",Toast.LENGTH_LONG).show();
-                        finish();
-                        BasicDB.setPREF_Result(getApplicationContext(),-1);
+                        polyline.setCoords(position);
+                        polyline.setColor(getResources().getColor(R.color.mainColor1));
+                        polyline.setMap(map);
+                        for (Marker marker : markers) {
+                            marker.setMap(map);
+                        }
                     }
                 });
-            }
-
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject member = results.getJSONObject(i);
-                double user_latitude = member.getDouble("latitude");
-                double user_longitude = member.getDouble("longitude");
-                int Fine = member.getInt("Fine_current");
-                double appoint_radius = member.getDouble("appointment_radius");
-                position.add(new LatLng(user_latitude, user_longitude));
-                radius.add(appoint_radius);
-                int circle_in = member.getInt("circle_in");
-
-                String date_time = member.getString("time");
-
-                Marker marker = new Marker();
-                marker.setPosition(new LatLng(user_latitude, user_longitude));
-                String tag = "누적벌금: " + Fine + "원";
-
-                if (circle_in == 1) tag = "[IN]0원부과\n" + tag;
-                else {
-                    tag = "[OUT] " + fine + "원부과\n" + tag;
-                }
-
-                tag = date_time.substring(0, 5) + "\n" + tag;
-
-
-                marker.setTag(tag);
-                marker.setIcon(MarkerIcons.BLACK);
-                marker.setIconTintColor(GetColor(arrayList.size()-1));
-                marker.setOnClickListener(new Overlay.OnClickListener() {
+            } catch (JSONException e) {
+                e.printStackTrace();
+                ResultActivity.this.runOnUiThread(new Runnable() {
                     @Override
-                    public boolean onClick(@NonNull Overlay overlay) {
-
-                        int position = markers.indexOf((Marker) overlay);
-                        SetCircle(appoint_latitude, appoint_longitude, radius.get(position));
-                        infoWindow.open((Marker) overlay);
-                        return true;
+                    public void run() {
+                        Toast.makeText(ResultActivity.this, "서버 문제로 정보를 불러올 수 없습니다.", Toast.LENGTH_LONG).show();
+                        BasicDB.setPREF_Result(getApplicationContext(), -1);
+                        finish();
                     }
                 });
-                markers.add(marker);
-            }
-            ResultActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    polyline.setCoords(position);
-                    polyline.setColor(getResources().getColor(R.color.mainColor1));
-                    polyline.setMap(map);
-                    for (Marker marker : markers) {
-                        marker.setMap(map);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                ResultActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ResultActivity.this, "약속 결과가 부족합니다..", Toast.LENGTH_LONG).show();
+                        BasicDB.setPREF_Result(getApplicationContext(), -1);
+                        finish();
                     }
-                }
-            });
-        }catch (JSONException e)
-        {
-            e.printStackTrace();
-            ResultActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ResultActivity.this,"서버 문제로 정보를 불러올 수 없습니다.",Toast.LENGTH_LONG).show();
-                    BasicDB.setPREF_Result(getApplicationContext(),-1);
-                    finish();
-                }
-            });
-        }
-        catch (IllegalArgumentException e)
-        {
-            e.printStackTrace();
-            ResultActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ResultActivity.this,"약속 결과가 부족합니다..",Toast.LENGTH_LONG).show();
-                    BasicDB.setPREF_Result(getApplicationContext(),-1);
-                    finish();
-                }
-            });
+                });
+            }
         }
     }
 
