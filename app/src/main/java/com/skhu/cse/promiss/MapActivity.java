@@ -677,8 +677,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 try {
                     JSONObject object = new JSONObject(result);
-                    if(object.getString("result").equals("NG"))
-                        BasicDB.setAppoint(getApplicationContext(),-1);
+                    if(object.getString("result").equals("NG")) {
+                        BasicDB.setAppoint(getApplicationContext(), -1);
+                        GameEnd();
+                    }
                     e.printStackTrace();
 
 
@@ -688,6 +690,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         public void run() {
                             Toast.makeText(MapActivity.this, "서버 문제로 잠시 뒤에 시도해주세요", Toast.LENGTH_SHORT).show();
                             BasicDB.setAppoint(getApplicationContext(), -1);
+                            GameEnd();
                             //  finish();
                         }
                     });

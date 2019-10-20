@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout layout;
     SoftKeyboard softKeyboard;
 
-    final private int MY_PERMISSIONS_REQUEST_READ_CONTACTS =200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,24 +79,12 @@ public class LoginActivity extends AppCompatActivity {
 //        });
         layout=findViewById(R.id.login_login_layout);
 
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED||
-                ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-
-            ActivityCompat.requestPermissions(LoginActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.RECORD_AUDIO},
-                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-        }else {
-            GoMain();
-        }
+        GoMain();
 
     }
 
     public void GoMain(){
-        if (BasicDB.getID(getApplicationContext()) == -1) //초기화 or 다시 로그인
-        {
+
             layout.setVisibility(View.VISIBLE);
             editText_id = (EditText) findViewById(R.id.login_edit_id);
             editText_password = (EditText) findViewById(R.id.login_edit_password);
@@ -131,22 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                                                    }
                                                }
             );
-        } else //이미 로그인
-        {
-            UserData data = UserData.shared;
-            data.setId(BasicDB.getID(getApplicationContext()));
-            data.setName(BasicDB.getUserId(getApplicationContext()));
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, 500);
-
-        }
     }
 
     private Callback callback = new Callback() {
@@ -199,28 +172,6 @@ public class LoginActivity extends AppCompatActivity {
             // JSONArray array;
         }
     };
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    GoMain();
-                } else {
-                    // permission denied, boo! Disable the
-                    Toast.makeText(LoginActivity.this,"권한을 허용해주세요",Toast.LENGTH_LONG).show();
-                    finish();
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
 
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
 
 }
