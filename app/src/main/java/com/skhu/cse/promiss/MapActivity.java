@@ -525,6 +525,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void GameEnd(){
         findViewById(R.id.map_appoint_time).setVisibility(View.GONE); //
+        recyclerView.setVisibility(View.GONE);
+        if(circle!=null) circle.setMap(null);
+        if(appointMarker!=null) appointMarker.setMap(null);
+        findViewById(R.id.map_add_btn).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.map_add_btn)).setText("약속 만들기");
         ((TextView) findViewById(R.id.map_appoint_address)).setText("현재 약속이 없습니다.");
     }
@@ -982,7 +986,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         MapActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                BasicDB.setAppoint(getApplicationContext(),BasicDB.getAppoint(getApplicationContext()));
+                                BasicDB.setPREF_Result(getApplicationContext(),BasicDB.getAppoint(getApplicationContext()));
                                 BasicDB.setAppoint(getApplicationContext(),-1);
                                 CheckAppointment();
                                 GameEnd();

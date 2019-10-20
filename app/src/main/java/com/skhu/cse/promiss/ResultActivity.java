@@ -436,5 +436,5 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
         builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경 뒤에 안보이기
         builder.show();
     }
-    
+
 }
