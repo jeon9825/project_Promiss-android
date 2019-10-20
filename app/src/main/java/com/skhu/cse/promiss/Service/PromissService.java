@@ -81,11 +81,11 @@ public class PromissService extends Service implements LocationListener {
 
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    60000,
+                    6000,
                     1,
                     this);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                    60000,
+                    6000,
                     1,
                     this);
         }

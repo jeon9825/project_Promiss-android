@@ -241,6 +241,8 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                 @Override
                 public void run() {
                     Toast.makeText(ResultActivity.this,"네트워크 문제로 정보를 불러올 수 없습니다.",Toast.LENGTH_LONG).show();
+                    finish();
+
                 }
             });
         }
@@ -316,6 +318,8 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                     @Override
                     public void run() {
                         Toast.makeText(ResultActivity.this,"서버 문제로 정보를 불러올 수 없습니다.",Toast.LENGTH_LONG).show();
+                        finish();
+                        BasicDB.setPREF_Result(getApplicationContext(),-1);
                     }
                 });
                 e.printStackTrace();
@@ -326,6 +330,19 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
     public void setPolylineMarkers(JSONArray results)
     {
         try {
+
+            if(results.length()==0)
+            {
+                ResultActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ResultActivity.this,"실행되지 않았던 약속입니다.",Toast.LENGTH_LONG).show();
+                        finish();
+                        BasicDB.setPREF_Result(getApplicationContext(),-1);
+                    }
+                });
+            }
+
             for (int i = 0; i < results.length(); i++) {
                 JSONObject member = results.getJSONObject(i);
                 double user_latitude = member.getDouble("latitude");
@@ -383,6 +400,8 @@ public class ResultActivity extends AppCompatActivity implements OnMapReadyCallb
                 @Override
                 public void run() {
                     Toast.makeText(ResultActivity.this,"서버 문제로 정보를 불러올 수 없습니다.",Toast.LENGTH_LONG).show();
+                    BasicDB.setPREF_Result(getApplicationContext(),-1);
+                    finish();
                 }
             });
         }
