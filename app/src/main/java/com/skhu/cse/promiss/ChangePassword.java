@@ -2,6 +2,7 @@ package com.skhu.cse.promiss;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -130,12 +131,14 @@ public class ChangePassword extends AppCompatActivity {
             }
         });
     }
+
     public void goLogin(){
         BasicDB.setId(getApplicationContext(),-1);
         BasicDB.setAppoint(getApplicationContext(),-1);
         BasicDB.setPREF_Result(getApplicationContext(),-1);
 
         findViewById(R.id.go_to_login).setVisibility(View.VISIBLE);
+        findViewById(R.id.password_input).setVisibility(View.GONE);
         findViewById(R.id.change_password_btn_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
