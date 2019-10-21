@@ -525,6 +525,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void GameEnd(){
         findViewById(R.id.map_appoint_time).setVisibility(View.GONE); //
+        if(recyclerView!=null)
         recyclerView.setVisibility(View.GONE);
         if(circle!=null) circle.setMap(null);
         if(appointMarker!=null) appointMarker.setMap(null);
