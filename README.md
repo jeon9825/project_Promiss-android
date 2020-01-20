@@ -25,7 +25,7 @@
   - 실시간 사용자 위치 탐색 알고리즘
   - 프로미스 chatbot 로직 구현
 * 수상 이력
-성공회대학교 2019년 IT 경진대회 동상
+  - 성공회대학교 2019년 IT 경진대회 동상
 * github 소스코드 공개 여부: 공개
    https://github.com/SKHU-CSE/Promiss_android/   
    https://github.com/SKHU-CSE/Promiss_iOS
