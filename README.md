@@ -27,6 +27,6 @@
 * 수상 이력
   - 성공회대학교 2019년 IT 경진대회 동상
 * github 소스코드 공개 여부: 공개
-   https://github.com/SKHU-CSE/Promiss_android/   
-   https://github.com/SKHU-CSE/Promiss_iOS
+   - https://github.com/SKHU-CSE/Promiss_android/   
+   - https://github.com/SKHU-CSE/Promiss_iOS
     
